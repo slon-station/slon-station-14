@@ -393,3 +393,24 @@
   - type: Tag
     tags:
     - RoundstartAntag
+
+- type: entity
+  parent: BaseGameRule
+  id: Gang
+  components:
+  - type: GangRule
+  - type: GameRule
+    chaosScore: 650
+    minPlayers: 35
+  - type: AntagSelection
+    agentName: gang-roundend-name
+    definitions:
+    - prefRoles: [ Gang ]
+      max: 4
+      platerRatio: 20
+      jobBlacklist: [ ChiefEngineer, ResearchDirector, Quartermaster, NanotrasenRepresentative ] # if a person can be a headrev, why he cant be a gang leader
+      mindRoles:
+      - GangLeaderMindRole
+  - type: Tag
+    tags:
+    - RoundstartAntag
