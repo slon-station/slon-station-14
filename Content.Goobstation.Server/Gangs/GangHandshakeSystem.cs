@@ -1,9 +1,11 @@
 using Content.Goobstation.Shared.Gangs;
+using Content.Goobstation.Server.Gangs.GameTicking.Rules;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Server.Antag;
 
 namespace Content.Goobstation.Server.Gangs;
 
@@ -12,6 +14,7 @@ public sealed class GangHandshakeSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly AntagSelectionSystem _antag = default!;
 
     public override void Initialize()
     {
@@ -84,12 +87,29 @@ public sealed class GangHandshakeSystem : EntitySystem
             RemComp<PendingGangHandshakeComponent>(target);
             return;
         }
+
         var memberComp = EnsureComp<GangMemberComponent>(target);
         memberComp.GangId = leaderComp.GangId;
-
         leaderComp.Members.Add(target);
 
-        _popup.PopupEntity(Loc.GetString("gang-handshake-accepted", ("user", offerer)), target, target);
+        GangRuleComponent? gangRule = null;
+        var query = EntityQueryEnumerator<GangRuleComponent>();
+        while (query.MoveNext(out var ruleUid, out var ruleComp))
+        {
+            gangRule = ruleComp;
+            break;
+        }
+
+        if (gangRule != null)
+        {
+            var briefing = Loc.GetString(gangRule.GangMemberGreeting);
+            _antag.SendBriefing(target, briefing, Color.Yellow, gangRule.MemberBriefingSound);
+        }
+        else
+        {
+            _popup.PopupEntity(Loc.GetString("gang-member-antag-greeter"), target, target);
+        }
+
         _popup.PopupEntity(Loc.GetString("gang-handshake-accepted-self", ("target", target)), offerer, offerer);
 
         RemComp<PendingGangHandshakeComponent>(target);
