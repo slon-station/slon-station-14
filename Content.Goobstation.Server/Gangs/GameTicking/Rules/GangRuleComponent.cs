@@ -10,7 +10,7 @@ public sealed partial class GangRuleComponent : Component
     public SoundPathSpecifier BriefingSound = new("/Audio/_Goobstation/Ambience/Antag/gang_start.ogg");
 
     [DataField]
-    public SoundPathSpecifier MemberBriefingSound = new("/Audio/_Goobstation/Ambience/Antag/gang_member_start.ogg");
+    public SoundPathSpecifier MemberBriefingSound = new("/Audio/_Goobstation/Ambience/Antag/gang_start.ogg");
 
     [DataField]
     public EntProtoId GangLeaderMindRole = "GangLeaderMindRole";

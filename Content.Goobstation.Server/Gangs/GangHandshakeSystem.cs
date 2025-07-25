@@ -6,6 +6,8 @@ using Content.Shared.Verbs;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Server.Antag;
+using Robust.Server.Audio;
+using Robust.Shared.Player;
 
 namespace Content.Goobstation.Server.Gangs;
 
@@ -15,6 +17,7 @@ public sealed class GangHandshakeSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
+    [Dependency] private readonly AudioSystem _audio = default!;
 
     public override void Initialize()
     {
@@ -105,13 +108,8 @@ public sealed class GangHandshakeSystem : EntitySystem
             var briefing = Loc.GetString(gangRule.GangMemberGreeting);
             _antag.SendBriefing(target, briefing, Color.Yellow, gangRule.MemberBriefingSound);
         }
-        else
-        {
-            _popup.PopupEntity(Loc.GetString("gang-member-antag-greeter"), target, target);
-        }
 
         _popup.PopupEntity(Loc.GetString("gang-handshake-accepted-self", ("target", target)), offerer, offerer);
-
         RemComp<PendingGangHandshakeComponent>(target);
     }
 

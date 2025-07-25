@@ -17,9 +17,8 @@ public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
     public override void Initialize()
     {
         base.Initialize();
-
         SubscribeLocalEvent<GangRuleComponent, AfterAntagEntitySelectedEvent>(OnSelectAntag);
-        SubscribeLocalEvent<GangRuleComponent, GetBriefingEvent>(OnGetBrief);
+        SubscribeLocalEvent<GangMemberComponent, GetBriefingEvent>(OnGetMemberBrief);
     }
 
     private void OnSelectAntag(EntityUid uid, GangRuleComponent comp, AfterAntagEntitySelectedEvent args)
@@ -45,14 +44,14 @@ public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
         return true;
     }
 
-    private void OnGetBrief(Entity<GangRuleComponent> comp, ref GetBriefingEvent args)
+    private void OnGetMemberBrief(Entity<GangMemberComponent> comp, ref GetBriefingEvent args)
     {
         if (args.Mind.Comp.OwnedEntity is { } entity)
-            args.Append(MakeBriefing(entity));
+            args.Append(MakeMemberBriefing(entity));
     }
 
-    private string MakeBriefing(EntityUid entity)
+    private string MakeMemberBriefing(EntityUid entity)
     {
-        return Loc.GetString("gang-leader-antag-greeter");
+        return Loc.GetString("gang-member-antag-greeter");
     }
 }
