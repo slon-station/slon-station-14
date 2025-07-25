@@ -27,12 +27,22 @@ public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
         MakeGangLeader(args.EntityUid, comp);
     }
 
-    public void MakeGangLeader(EntityUid uid, GangRuleComponent comp)
+    public bool MakeGangLeader(EntityUid uid, GangRuleComponent component)
     {
-        EnsureComp<GangLeaderComponent>(uid);
+        // creating the gang with the id
+        var gangId = uid;
+
+        var leaderComp = EnsureComp<GangLeaderComponent>(uid);
+        leaderComp.GangId = gangId;
+
+        var memberComp = EnsureComp<GangMemberComponent>(uid);
+        memberComp.GangId = gangId;
+        leaderComp.Members.Add(uid);
 
         var briefing = Loc.GetString("gang-leader-antag-greeter");
-        _antag.SendBriefing(uid, briefing, Color.Yellow, comp.BriefingSound);
+        _antag.SendBriefing(uid, briefing, Color.Yellow, component.BriefingSound);
+
+        return true;
     }
 
     private void OnGetBrief(Entity<GangRuleComponent> comp, ref GetBriefingEvent args)
