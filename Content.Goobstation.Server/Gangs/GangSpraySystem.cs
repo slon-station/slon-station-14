@@ -73,12 +73,16 @@ public sealed class GangSpraySystem : EntitySystem
 
     private void OnDoAfterComplete(EntityUid uid, GangSprayComponent comp, GangSprayDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled || args.Args.Target == null)
+        if (args.Handled
+            || args.Cancelled
+            || args.Args.Target == null)
             return;
 
         var user = args.Args.User;
 
-        if (!_entMan.TryGetEntity(args.GangEntity, out EntityUid? temp) || temp == null || temp.Value == EntityUid.Invalid)
+        if (!_entMan.TryGetEntity(args.GangEntity, out EntityUid? temp)
+            || temp == null
+            || temp.Value == EntityUid.Invalid)
         {
             _popup.PopupEntity(Loc.GetString("gang-spray-failed"), user, user);
             return;
