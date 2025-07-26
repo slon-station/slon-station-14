@@ -96,7 +96,7 @@ public sealed class GangSpraySystem : EntitySystem
 
         var graffiti = Spawn(prototypeId, coords);              // HATE. LET ME TELL YOU HOW I CAME TO HATE THESE 3 LINES.
         var graffitiComp = EnsureComp<GangGraffitiComponent>(graffiti); // IT THINKS THAT GRAFFITI HAS NETID XXX8, WHILE THE ACTUAL
-        graffitiComp.GangId = gangEntity;                               // NETID OF THE GRAFFITY IS XXX9, WHYYYYYYY???????????????
+        graffitiComp.GangId = gangEntity;                               // NETID OF THE GRAFFITI IS XXX9, WHYYYYYYY???????????????
 
         _popup.PopupEntity(Loc.GetString("gang-spray-success"), user, user);
         args.Handled = true;
