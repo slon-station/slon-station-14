@@ -22,4 +22,14 @@ gang-handshake-accepted-self = {$target} has joined your gang!
 gang-handshake-invalid = The offer is invalid
 gang-handshake-expired = Invite has expired
 
+gang-spray-start = You start tagging the {$target}...
+gang-spray-success = You finnished tagging.
+gang-spray-cant = You cant think of anything cool to spray.
+
+gang-signs-count = {$count} gang signs
+gang-gang-led-by = Gang led by {$leader} ({$signs}):
+gang-gang-no-leader = Gang (no leader) ({$signs}):
+gang-members-header = Members:
+
+
 gang-roundend-name = Gang
