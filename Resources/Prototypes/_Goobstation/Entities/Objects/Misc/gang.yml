@@ -10,7 +10,7 @@
   - type: GangSpray
 
 - type: entity
-  id: RandomGangSignAny
+  id: RandomGangSignAny # i will not delete this because mappers told me to leave it
   parent: MarkerBase
   name: random gang sign spawner
   components:

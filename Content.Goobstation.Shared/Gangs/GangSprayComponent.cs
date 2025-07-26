@@ -11,4 +11,7 @@ public sealed partial class GangSprayComponent : Component
 
     [DataField]
     public float SprayTime = 7f;
+
+    [DataField]
+    public int MaxGraffitiPrototypes = 23; // i cant express my frustration on what i did to figure this out
 }

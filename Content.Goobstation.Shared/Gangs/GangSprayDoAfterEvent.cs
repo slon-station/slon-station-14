@@ -12,6 +12,4 @@ public sealed partial class GangSprayDoAfterEvent : SimpleDoAfterEvent
     {
         GangEntity = gangEntity;
     }
-
-    private GangSprayDoAfterEvent() { }
 }

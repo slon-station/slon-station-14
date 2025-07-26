@@ -407,7 +407,7 @@
     definitions:
     - prefRoles: [ Gang ]
       max: 4
-      platerRatio: 20
+      playerRatio: 20
       jobBlacklist: [ ChiefEngineer, ResearchDirector, Quartermaster, NanotrasenRepresentative ] # if a person can be a headrev, why he cant be a gang leader
       mindRoles:
       - GangLeaderMindRole

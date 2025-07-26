@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Goobstation.Server.Gangs.Roles;
 using Content.Goobstation.Shared.Gangs;
 using Content.Server.Antag;
 using Content.Server.GameTicking;
