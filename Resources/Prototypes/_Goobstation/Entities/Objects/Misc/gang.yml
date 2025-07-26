@@ -1,13 +1,16 @@
 - type: entity
   id: SprayPainterGang
   name: gang spray painter
-  parent: [ BaseItem, BaseSyndicateContraband]
+  parent: [ BaseItem, BaseMajorContraband]
   description: A weird spray painter, that gang members use to mark their territory.
   components:
   - type: Sprite
     sprite: _Goobstation/Objects/Gang/spray.rsi
     state: icon
   - type: GangSpray
+  - type: Construction
+    graph: GangSpray
+    node: end
 
 - type: entity
   id: RandomGangSignAny # i will not delete this because mappers told me to leave it
