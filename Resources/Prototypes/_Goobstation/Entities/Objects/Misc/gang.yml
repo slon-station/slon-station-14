@@ -13,6 +13,25 @@
     node: end
 
 - type: entity
+  parent: [BaseItem, BaseMinorContraband]
+  id: GangRadio
+  name: suspicious radio
+  description: A radio, tuned to a specific frequency that gang members use to share information about new drops.
+  components:
+  - type: Sprite
+    sprite: _Goobstation/Objects/Gang/gang.rsi
+    state: radio
+  - type: RadioSpeaker
+    channels:
+    - GangRadio
+  - type: Speech
+    speechVerb: Robotic
+  - type: Tag
+    tags:
+    - Radio
+  - type: TelecomExempt
+
+- type: entity
   id: RandomGangSignAny # i will not delete this because mappers told me to leave it
   parent: MarkerBase
   name: random gang sign spawner

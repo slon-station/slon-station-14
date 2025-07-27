@@ -33,3 +33,6 @@ gang-members-header = Members:
 
 
 gang-roundend-name = Gang
+
+gang-drop-announcement = Yo attention y'all, boss dropping the package at {$location}. Get ready yo.
+gang-drop-spawned = Pack dropped at {$location}!

@@ -399,6 +399,10 @@
   id: Gang
   components:
   - type: GangRule
+    dropInterval: 48 # todo
+    warningTime: 12
+    cratePrototype: CrateSyndicate
+    channelId: GangRadio
   - type: GameRule
     chaosScore: 650
     minPlayers: 35

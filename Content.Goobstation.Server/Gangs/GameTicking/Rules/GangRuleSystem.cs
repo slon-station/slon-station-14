@@ -3,25 +3,150 @@ using Content.Goobstation.Shared.Gangs;
 using Content.Server.Antag;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
-using Content.Server.Mind;
+using Content.Server.Pinpointer;
+using Content.Server.Radio.EntitySystems;
 using Content.Server.Roles;
+using Content.Server.Spawners.Components;
 using Content.Shared.GameTicking.Components;
-using Robust.Shared.Player;
+using Content.Shared.Pinpointer;
+using Content.Shared.Radio;
+using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+using Robust.Shared.Utility;
 
 namespace Content.Goobstation.Server.Gangs.GameTicking.Rules;
-
 
 public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
 {
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly NavMapSystem _navMap = default!;
+    [Dependency] private readonly RadioSystem _radio = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<GangRuleComponent, AfterAntagEntitySelectedEvent>(OnSelectAntag);
         SubscribeLocalEvent<GangMemberComponent, GetBriefingEvent>(OnGetMemberBrief);
+        SubscribeLocalEvent<GameRunLevelChangedEvent>(OnRunLevelChanged);
+    }
+
+    #region Crate Drop System
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<GangRuleComponent, GameRuleComponent>();
+        while (query.MoveNext(out var uid, out var gangRule, out var gameRule))
+        {
+            if (!GameTicker.IsGameRuleActive(uid, gameRule))
+                continue;
+
+            gangRule.Accumulator += frameTime;
+            if (!gangRule.Announced && gangRule.Accumulator >= gangRule.DropInterval - gangRule.WarningTime)
+                AnnounceDrop(uid, gangRule);
+        }
+    }
+
+    private void AnnounceDrop(EntityUid uid, GangRuleComponent comp)
+    {
+        comp.Announced = true;
+        comp.DropLocation = FindLocation();
+
+        // this spawns a marker that spawns a gang crate after despawn
+        var marker = Spawn("SpawnSupplypodAnimation", comp.DropLocation.Value);
+
+        var locationStr = FormattedMessage.RemoveMarkupOrThrow(
+            _navMap.GetNearestBeaconString(marker));
+
+        var message = Loc.GetString("gang-drop-announcement", ("location", locationStr));
+        SendGangRadioMessage(uid, message, comp.ChannelId);
+        comp.Accumulator = 0f;
+        comp.Announced = false;
+        comp.DropLocation = null;
+    }
+
+
+
+    private void SendGangRadioMessage(EntityUid sourceUid, string message, string channelId)
+    {
+        if (!_proto.TryIndex<RadioChannelPrototype>(channelId, out var channel))
+            return;
+
+        _radio.SendRadioMessage(
+            messageSource: sourceUid,
+            message: message,
+            channel: channel,
+            radioSource: sourceUid,
+            language: null, // it works okay
+            escapeMarkup: true
+        );
+    }
+
+    private EntityCoordinates FindLocation()
+    {
+        var beacons = new List<EntityCoordinates>();
+        var query = EntityQueryEnumerator<NavMapBeaconComponent, TransformComponent>();
+        while (query.MoveNext(out _, out _, out var xform))
+        {
+            beacons.Add(xform.Coordinates);
+        }
+
+        if (beacons.Count > 0)
+            return _random.Pick(beacons);
+
+        var spawnPoints = new List<EntityCoordinates>();
+        var spawnQuery = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
+        while (spawnQuery.MoveNext(out var uid, out var spawnPoint, out var xform))
+        {
+            if (spawnPoint.SpawnType != SpawnPointType.LateJoin)
+                continue;
+
+            spawnPoints.Add(xform.Coordinates);
+        }
+
+        if (spawnPoints.Count > 0)
+            return _random.Pick(spawnPoints);
+
+        // fallback
+        return new EntityCoordinates();
+    }
+
+    private void PrepareDropLocation(GangRuleComponent comp)
+    {
+        // choosing the location
+        comp.DropLocation = FindLocation();
+    }
+
+
+    #endregion
+
+    #region Game Rule Stuff
+
+    private void OnRunLevelChanged(GameRunLevelChangedEvent ev)
+    {
+        if (ev.New == GameRunLevel.InRound)
+        {
+            ResetDropTimers();
+        }
+    }
+
+    private void ResetDropTimers()
+    {
+        var query = EntityQueryEnumerator<GangRuleComponent, GameRuleComponent>();
+        while (query.MoveNext(out var uid, out var gangRule, out var gameRule))
+        {
+            if (!GameTicker.IsGameRuleActive(uid, gameRule))
+                continue;
+            gangRule.Accumulator = 0f;
+            gangRule.Announced = false;
+            gangRule.DropLocation = null;
+        }
     }
 
     private void OnSelectAntag(EntityUid uid, GangRuleComponent comp, AfterAntagEntitySelectedEvent args)
@@ -112,4 +237,6 @@ public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
             args.AddLine(""); // peak
         }
     }
+
+    #endregion
 }
