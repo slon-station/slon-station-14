@@ -14,6 +14,10 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Popups;
 
 namespace Content.Goobstation.Server.Gangs.GameTicking.Rules;
 
@@ -26,6 +30,8 @@ public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
     [Dependency] private readonly RadioSystem _radio = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -33,6 +39,7 @@ public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
         SubscribeLocalEvent<GangRuleComponent, AfterAntagEntitySelectedEvent>(OnSelectAntag);
         SubscribeLocalEvent<GangMemberComponent, GetBriefingEvent>(OnGetMemberBrief);
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnRunLevelChanged);
+        SubscribeLocalEvent<GangLeaderComponent, MobStateChangedEvent>(OnLeaderMobStateChanged);
     }
 
     #region Crate Drop System
@@ -252,6 +259,52 @@ public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
                 return hat;
         }
         return null;
+    }
+
+    private void OnLeaderMobStateChanged(EntityUid uid, GangLeaderComponent leader, MobStateChangedEvent args)
+    {
+        if (args.NewMobState != MobState.Dead)
+            return;
+
+        TransferLeadership(uid, leader);
+    }
+
+    private void TransferLeadership(EntityUid oldLeader, GangLeaderComponent leaderComp)
+    {
+        var gangId = leaderComp.GangId;
+        var possibleLeaders = new List<EntityUid>();
+
+        var query = EntityQueryEnumerator<GangMemberComponent, MobStateComponent>();
+        while (query.MoveNext(out var memberUid, out var memberComp, out var mobState))
+        {
+            if (memberComp.GangId != gangId
+                || memberUid == oldLeader
+                || !_mobState.IsAlive(memberUid, mobState))
+                continue;
+
+            possibleLeaders.Add(memberUid);
+        }
+        if (possibleLeaders.Count == 0)
+        {
+            RemComp<GangLeaderComponent>(oldLeader);
+            return;
+        }
+
+        var newLeader = _random.Pick(possibleLeaders);
+        var newLeaderName = MetaData(newLeader).EntityName;
+        RemComp<GangLeaderComponent>(oldLeader);
+
+        var newLeaderComp = AddComp<GangLeaderComponent>(newLeader);
+        newLeaderComp.GangId = gangId;
+        newLeaderComp.Members = leaderComp.Members;
+
+        foreach (var member in newLeaderComp.Members)
+        {
+            if (!Exists(member))
+                continue;
+
+            _popup.PopupEntity(Loc.GetString("gang-new-leader-announcement", ("name", newLeaderName)),member,member, PopupType.MediumCaution);
+        }
     }
 
     #endregion

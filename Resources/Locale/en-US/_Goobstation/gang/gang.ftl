@@ -22,6 +22,8 @@ gang-handshake-accepted-self = {$target} has joined your gang! A hat matterialis
 gang-handshake-invalid = The offer is invalid
 gang-handshake-expired = Invite has expired
 
+gang-new-leader-announcement = The leader has changed! New leader: {$name}.
+
 gang-spray-start = You start tagging the {$target}...
 gang-spray-success = You finnished tagging.
 gang-spray-cant = You cant think of anything cool to spray.
