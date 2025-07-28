@@ -6,6 +6,8 @@ using Content.Shared.Verbs;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Server.Antag;
+using Content.Shared.Inventory;
+using Content.Shared.Mobs.Components;
 using Robust.Server.Audio;
 using Robust.Shared.Player;
 
@@ -17,7 +19,8 @@ public sealed class GangHandshakeSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private readonly GangRuleSystem _gangRuleSystem = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
 
     public override void Initialize()
     {
@@ -38,7 +41,7 @@ public sealed class GangHandshakeSystem : EntitySystem
         if (TryComp<GangMemberComponent>(args.Target, out var targetMember) && targetMember.GangId == comp.GangId)
             return;
 
-
+        // cant offer a handshake to an item or another gang member
         if (HasComp<GangMemberComponent>(args.Target)
             || HasComp<PendingGangHandshakeComponent>(args.Target))
             return;
@@ -47,7 +50,7 @@ public sealed class GangHandshakeSystem : EntitySystem
         {
             Act = () => OfferHandshake(args.User, args.Target),
             Text = Loc.GetString("gang-handshake-verb", ("target", args.Target)),
-            Icon = new SpriteSpecifier.Rsi(new("Clothing/Head/Bandanas/skull.rsi"), "icon"),
+            Icon = new SpriteSpecifier.Rsi(new("_Goobstation/Clothing/Head/Hats/Gang/tophat.rsi"), "icon"),
             Priority = 1
         };
         args.Verbs.Add(handshakeVerb);
@@ -76,7 +79,7 @@ public sealed class GangHandshakeSystem : EntitySystem
         {
             Act = () => AcceptHandshake(uid, comp.Offerer),
             Text = Loc.GetString("gang-handshake-accept-verb", ("user", comp.Offerer)),
-            Icon = new SpriteSpecifier.Rsi(new("Clothing/Head/Bandanas/skull.rsi"), "icon"),
+            Icon = new SpriteSpecifier.Rsi(new("_Goobstation/Clothing/Head/Hats/Gang/tophat.rsi"), "icon"),
             Priority = 1
         };
         args.Verbs.Add(handshakeVerb);
@@ -95,6 +98,8 @@ public sealed class GangHandshakeSystem : EntitySystem
         memberComp.GangId = leaderComp.GangId;
         leaderComp.Members.Add(target);
 
+        ForceHat(target, leaderComp.GangId);
+
         GangRuleComponent? gangRule = null;
         var query = EntityQueryEnumerator<GangRuleComponent>();
         while (query.MoveNext(out var ruleUid, out var ruleComp))
@@ -111,6 +116,21 @@ public sealed class GangHandshakeSystem : EntitySystem
 
         _popup.PopupEntity(Loc.GetString("gang-handshake-accepted-self", ("target", target)), offerer, offerer);
         RemComp<PendingGangHandshakeComponent>(target);
+    }
+
+    private void ForceHat(EntityUid memberUid, EntityUid gangId)
+    {
+        var hatProto = _gangRuleSystem.GetHatProto(gangId);
+        if (hatProto == null)
+            return;
+
+        var hat = Spawn(hatProto, Transform(memberUid).Coordinates);
+
+        if (_inventory.TryGetSlotEntity(memberUid, "neck", out var existingHat))
+            _inventory.TryUnequip(memberUid, "neck");
+
+
+        _inventory.TryEquip(memberUid, hat, "neck");
     }
 
     public override void Update(float frameTime)

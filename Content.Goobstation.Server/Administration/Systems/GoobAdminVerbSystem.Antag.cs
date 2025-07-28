@@ -87,7 +87,7 @@ public sealed partial class GoobAdminVerbSystem
         {
             Text = Loc.GetString("admin-verb-text-make-gang-leader"),
             Category = VerbCategory.Antag,
-            Icon = new SpriteSpecifier.Rsi(new("Clothing/Head/Bandanas/skull.rsi"), "icon"),
+            Icon = new SpriteSpecifier.Rsi(new("_Goobstation/Clothing/Head/Hats/Gang/tophat.rsi"), "icon"),
             Act = () =>
             {
                 _antag.ForceMakeAntag<GangRuleComponent>(targetPlayer, "Gang");

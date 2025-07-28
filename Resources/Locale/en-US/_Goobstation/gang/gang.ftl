@@ -17,8 +17,8 @@ gang-handshake-verb = Invite {$target} to join the gang
 gang-handshake-offer = {$user} invites you to join their gang
 gang-handshake-offer-self = You offered {$target} to join your gang
 gang-handshake-accept-verb = Accept the offer {$user}
-gang-handshake-accepted = You have joined the {$user} gang!
-gang-handshake-accepted-self = {$target} has joined your gang!
+gang-handshake-accepted = You have joined the {$user} gang! A hat matterialises on your head.
+gang-handshake-accepted-self = {$target} has joined your gang! A hat matterialises on his head.
 gang-handshake-invalid = The offer is invalid
 gang-handshake-expired = Invite has expired
 
@@ -34,5 +34,5 @@ gang-members-header = Members:
 
 gang-roundend-name = Gang
 
-gang-drop-announcement = Yo attention y'all, boss dropping the package at {$location}. Get ready yo.
+gang-drop-announcement = Yo attention y'all, boss dropping the package {$location}. Get ready yo.
 gang-drop-spawned = Pack dropped at {$location}!

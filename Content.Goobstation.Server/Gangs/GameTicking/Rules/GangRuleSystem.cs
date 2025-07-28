@@ -159,6 +159,12 @@ public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
         // creating the gang with the id
         var gangId = uid;
 
+        if (component.AvailableHatTypes.Count == 0)
+            return false; // womp womp on people that get the seventh gang leader (7 is too much already)
+
+        var hatType = _random.PickAndTake(component.AvailableHatTypes);
+        component.GangHatPreferences[gangId] = hatType;
+
         var leaderComp = EnsureComp<GangLeaderComponent>(uid);
         leaderComp.GangId = gangId;
 
@@ -236,6 +242,16 @@ public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
             }
             args.AddLine(""); // peak
         }
+    }
+    public string? GetHatProto(EntityUid gangId)
+    {
+        var query = EntityQueryEnumerator<GangRuleComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.GangHatPreferences.TryGetValue(gangId, out var hat))
+                return hat;
+        }
+        return null;
     }
 
     #endregion
