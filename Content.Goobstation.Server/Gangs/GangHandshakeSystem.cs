@@ -34,14 +34,22 @@ public sealed class GangHandshakeSystem : EntitySystem
     {
         if (!args.CanAccess
             || !args.CanInteract
-            || _mobState.IsIncapacitated(args.Target)
             || args.Target == args.User)
+            return;
+
+        // check the target
+        if (!TryComp<MobStateComponent>(args.Target, out var targetMobState)
+            || !_mobState.IsAlive(args.Target, targetMobState))
+            return;
+
+        // check the leader
+        if (!TryComp<MobStateComponent>(uid, out var leaderMobState)
+            || !_mobState.IsAlive(uid, leaderMobState))
             return;
 
         if (TryComp<GangMemberComponent>(args.Target, out var targetMember) && targetMember.GangId == comp.GangId)
             return;
 
-        // cant offer a handshake to an item or another gang member
         if (HasComp<GangMemberComponent>(args.Target)
             || HasComp<PendingGangHandshakeComponent>(args.Target))
             return;
