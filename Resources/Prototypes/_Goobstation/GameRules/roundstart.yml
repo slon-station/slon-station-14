@@ -415,6 +415,7 @@
       jobBlacklist: [ ChiefEngineer, ResearchDirector, Quartermaster, NanotrasenRepresentative ] # if a person can be a headrev, why he cant be a gang leader
       mindRoles:
       - GangLeaderMindRole
+      startingGear: GangLeaderStartingGear
   - type: Tag
     tags:
     - RoundstartAntag

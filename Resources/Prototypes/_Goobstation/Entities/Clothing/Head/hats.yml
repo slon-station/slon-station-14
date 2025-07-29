@@ -353,7 +353,7 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingHeadHatTophatGang
-  name: top hat
+  name: gang tophat
   description: A black durable and stylish hat, used mostly by gang members.
   components:
   - type: Sprite
@@ -369,7 +369,7 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingHeadHatLTophatGang
-  name: long top hat
+  name: long tophat
   description: A black durable and stylish hat, used mostly by gang members.
   components:
   - type: Sprite
@@ -385,7 +385,7 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingHeadHatWhiteTophatGang
-  name: white top hat
+  name: white tophat
   description: White, durable and stylish hat, used mostly by gang members.
   components:
   - type: Sprite
@@ -401,7 +401,7 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingHeadHatPurpleTophatGang
-  name: purple top hat
+  name: purple tophat
   description: Purple, durable and stylish hat, used mostly by gang members.
   components:
   - type: Sprite
@@ -417,7 +417,7 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingHeadHatGoldenTophatGang
-  name: golden top hat
+  name: golden tophat
   description: Golden, durable and stylish hat, used mostly by gang members.
   components:
   - type: Sprite
@@ -433,7 +433,7 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingHeadHatStarTophatGang
-  name: star top hat
+  name: star tophat
   description: A black, durable and stylish hat, used mostly by gang members.
   components:
   - type: Sprite
