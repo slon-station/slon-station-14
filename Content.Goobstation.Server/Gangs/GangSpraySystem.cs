@@ -31,7 +31,9 @@ public sealed class GangSpraySystem : EntitySystem
 
     private void OnAfterInteract(EntityUid uid, GangSprayComponent comp, AfterInteractEvent args)
     {
-        if (!args.CanReach || args.Target == null || args.Handled)
+        if (!args.CanReach
+            || args.Target == null
+            || args.Handled)
             return;
 
         EntityUid? gangEntity = null;
@@ -42,7 +44,9 @@ public sealed class GangSpraySystem : EntitySystem
         else if (TryComp<GangLeaderRoleComponent>(args.User, out var roleComp))
             gangEntity = roleComp.GangId;
 
-        if (gangEntity == null || !_entMan.EntityExists(gangEntity.Value) || gangEntity.Value == EntityUid.Invalid)
+        if (gangEntity == null
+            || !_entMan.EntityExists(gangEntity.Value)
+            || gangEntity.Value == EntityUid.Invalid)
         {
             _popup.PopupEntity(Loc.GetString("gang-spray-cant"), args.User, args.User);
             return;
@@ -70,7 +74,9 @@ public sealed class GangSpraySystem : EntitySystem
 
     private void OnDoAfterComplete(EntityUid uid, GangSprayComponent comp, GangSprayDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled || args.Args.Target == null)
+        if (args.Handled
+            || args.Cancelled
+            || args.Args.Target == null)
             return;
 
         var user = args.Args.User;
