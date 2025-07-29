@@ -1,6 +1,8 @@
+using Robust.Shared.GameStates;
+
 namespace Content.Goobstation.Server.Gangs;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class GangGraffitiComponent : Component
 {
     [DataField]
