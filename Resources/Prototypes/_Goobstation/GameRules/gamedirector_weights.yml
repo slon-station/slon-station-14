@@ -91,3 +91,10 @@
   - BlobGameMode
   - CosmicCult
   - Heretic
+
+- type: incompatibleModes
+  id: Gang
+  modes:
+  - Nukeops
+  - CosmicCult
+  - HonkOps

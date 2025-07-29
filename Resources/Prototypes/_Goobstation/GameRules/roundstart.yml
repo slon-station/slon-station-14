@@ -399,8 +399,8 @@
   id: Gang
   components:
   - type: GangRule
-    dropInterval: 48 # todo
-    warningTime: 12
+    dropInterval: 480 # 8 minutes to prepare
+    warningTime: 120  # 2 minutes to find and fight for the drop
     cratePrototype: CrateSyndicate
     channelId: GangRadio
   - type: GameRule
@@ -410,7 +410,7 @@
     agentName: gang-roundend-name
     definitions:
     - prefRoles: [ Gang ]
-      max: 4
+      max: 4 # the limit is 6, but its 4 here because tokens exist
       playerRatio: 20
       jobBlacklist: [ ChiefEngineer, ResearchDirector, Quartermaster, NanotrasenRepresentative ] # if a person can be a headrev, why he cant be a gang leader
       mindRoles:

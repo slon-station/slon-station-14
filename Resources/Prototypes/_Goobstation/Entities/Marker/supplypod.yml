@@ -6,7 +6,7 @@
     sprite: _Goobstation/Objects/Gang/marker.rsi
     state: marker_ping
   - type: TimedDespawn
-    lifetime: 12
+    lifetime: 120
   - type: SpawnOnDespawn
     prototype: CrateGangFilled
   - type: Tag

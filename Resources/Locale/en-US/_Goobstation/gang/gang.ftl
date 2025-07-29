@@ -1,3 +1,6 @@
+gang-title = Gang Wars
+gang-desc = Compete with other gangs for tip-offs, tag walls, and make this station respect you.
+
 gang-leader-antag-greeter = You are a gang leader!
     Invite people to join your gang,
     vandalise the station by breaking things or draw gang signs.
