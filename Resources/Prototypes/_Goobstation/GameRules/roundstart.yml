@@ -401,7 +401,6 @@
   - type: GangRule
     dropInterval: 480 # 8 minutes to prepare
     warningTime: 120  # 2 minutes to find and fight for the drop
-    cratePrototype: CrateSyndicate
     channelId: GangRadio
   - type: GameRule
     chaosScore: 650
