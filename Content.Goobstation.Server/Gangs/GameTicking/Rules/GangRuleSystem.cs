@@ -212,8 +212,15 @@ public sealed class GangRuleSystem : GameRuleSystem<GangRuleComponent>
         while (graffitiQuery.MoveNext(out _, out var graffiti))
         {
             var gangId = graffiti.GangId;
-            gangSignCounts.TryGetValue(gangId, out var count);
-            gangSignCounts[gangId] = count + 1;
+
+            if (gangId == null
+                || !gangId.Value.IsValid())
+                continue;
+
+            var id = gangId.Value;
+
+            gangSignCounts.TryGetValue(id, out var count);
+            gangSignCounts[id] = count + 1;
         }
 
         var memberQuery = EntityQueryEnumerator<GangMemberComponent, MetaDataComponent>();
