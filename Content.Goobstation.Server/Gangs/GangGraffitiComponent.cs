@@ -6,5 +6,5 @@ namespace Content.Goobstation.Server.Gangs;
 public sealed partial class GangGraffitiComponent : Component
 {
     [DataField]
-    public EntityUid GangId;
+    public EntityUid? GangId;
 }
