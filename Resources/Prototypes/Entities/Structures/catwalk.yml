@@ -48,7 +48,7 @@
   - type: Transform
     anchored: true
   - type: IconSmooth
-    key: catwalk
+    key: walls # slon edit
     base: catwalk_
   - type: FootstepModifier
     footstepSoundCollection:
