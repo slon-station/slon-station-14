@@ -11,7 +11,7 @@ namespace Content.Server._Slon.Sm;
 public sealed partial class CascadeComponent : Component
 {
     [DataField]
-    public float Radius = 1.5f;
+    public float Radius = 1f;
 
     [DataField]
     public DamageSpecifier Damage = new()
