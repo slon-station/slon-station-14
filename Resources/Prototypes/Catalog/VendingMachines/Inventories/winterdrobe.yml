@@ -50,6 +50,7 @@
 
   contrabandInventory: # Goobstation
     ClothingOuterDavidsJacket: 1
+    ClothingOuterWinterCosmic: 1 # slon
 
   emaggedInventory:
     ClothingNeckScarfStripedSyndieGreen: 3

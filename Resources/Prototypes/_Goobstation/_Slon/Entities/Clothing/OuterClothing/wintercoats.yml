@@ -1,0 +1,12 @@
+- type: entity
+  parent: ClothingOuterWinterCoat
+  id: ClothingOuterWinterCosmic
+  name: cosmic winter coat
+  description: An expensive machine-made winter coat.
+  components:
+  - type: Sprite
+    sprite: _Goobstation/_Slon/Clothing/cosmos.rsi
+    state: icon
+  - type: Clothing
+    sprite: _Goobstation/_Slon/Clothing/cosmos.rsi
+
