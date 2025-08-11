@@ -182,6 +182,9 @@ namespace Content.Server.Database
         public DbSet<BanTemplate> BanTemplate { get; set; } = null!;
         public DbSet<IPIntelCache> IPIntelCache { get; set; } = null!;
 
+        // Goobstation
+        public DbSet<Achievement> Achievement { get; set; } = default!;
+
         // RMC14
         public DbSet<RMCDiscordAccount> RMCDiscordAccounts { get; set; } = default!;
         public DbSet<RMCLinkedAccount> RMCLinkedAccounts { get; set; } = default!;
@@ -519,6 +522,17 @@ namespace Content.Server.Database
                 .Property(p => p.Type)
                 .HasDefaultValue(HwidType.Legacy);
 
+            // Goobstation
+            modelBuilder.Entity<Achievement>()
+                .HasOne(a => a.Player)
+                .WithMany(p => p.Achievements)
+                .HasForeignKey(a => a.PlayerId)
+                .HasPrincipalKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Achievement>()
+                .HasIndex(a => a.AchievementId);
+
             // RMC14
             modelBuilder.Entity<RMCLinkedAccount>()
                 .HasOne(l => l.Player)
@@ -804,6 +818,9 @@ namespace Content.Server.Database
         public List<ServerRoleBan> AdminServerRoleBansCreated { get; set; } = null!;
         public List<ServerRoleBan> AdminServerRoleBansLastEdited { get; set; } = null!;
         public List<RoleWhitelist> JobWhitelists { get; set; } = null!;
+
+        // Goobstation
+        public List<Achievement> Achievements { get; set; } = new();
 
         // RMC14
         public RMCLinkedAccount? LinkedAccount { get; set; }
