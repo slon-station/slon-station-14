@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-SA-3.0",
+  "copyright": "taken from https://github.com/cmss13-devs/cmss13/tree/master/icons/obj/structures/machinery",
+  "size": {
+    "x": 32,
+    "y": 96
+  },
+  "states": [
+    {
+      "name": "comm_tower_off"
+    },
+    {
+      "name": "comm_tower",
+      "delays": [
+        [
+          0.1,
+          0.5,
+          5.4
+        ]
+      ]
+    },
+    {
+      "name": "comm_tower_broken"
+    },
+    {
+      "name": "construct_0_0"
+    },
+    {
+      "name": "construct_1_0"
+    },
+    {
+      "name": "construct_2_0"
+    },
+    {
+      "name": "construct_2_1"
+    },
+    {
+      "name": "construct_3_0"
+    },
+    {
+      "name": "construct_3_1"
+    },
+    {
+      "name": "construct_4_0"
+    },
+    {
+      "name": "construct_4_1"
+    },
+    {
+      "name": "construct_5_0"
+    },
+    {
+      "name": "construct_5_1"
+    },
+    {
+      "name": "construct_6_0"
+    },
+    {
+      "name": "construct_6_1"
+    },
+    {
+      "name": "construct_7_0"
+    },
+    {
+      "name": "construct_7_1"
+    },
+    {
+      "name": "construct_8_0"
+    },
+    {
+      "name": "construct_8_1"
+    },
+    {
+      "name": "construct_9_0"
+    },
+    {
+      "name": "construct_9_1"
+    }
+  ]
+}

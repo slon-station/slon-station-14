@@ -17,3 +17,8 @@
   id: ExperimentalScienceGoob
   recipes:
   - ExperimentalCircuitBoard
+
+- type: latheRecipePack
+  id: CommunicationTower
+  recipes:
+  - GoalCommunicationShieldCircuitBoard

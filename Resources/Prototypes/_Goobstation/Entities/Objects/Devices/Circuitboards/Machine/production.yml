@@ -103,3 +103,19 @@
         Steel: 5
         CableHV: 10
         Plasma: 5
+
+# slon
+- type: entity
+  id: GoalCommunicationShieldCircuitBoard
+  name: communication tower shield machine board
+  parent: BaseMachineCircuitboard
+  description: A machine printed circuit board for a communication tower shield.
+  components:
+  - type: Sprite
+    state: command
+  - type: MachineBoard
+    prototype: CommTower1
+    stackRequirements:
+      Manipulator: 4
+      Steel: 6
+      Cable: 5

@@ -1,0 +1,126 @@
+- type: constructionGraph
+  id: CommTower
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: commtower2
+      steps:
+      - material: Steel
+        amount: 5
+        doAfter: 3
+      - tool: Welding
+        doAfter: 5
+  - node: commtower2
+    entity: CommTower2
+    edges:
+    - to: commtower3.5
+      steps:
+      - material: Steel
+        amount: 5
+        doAfter: 3
+      - tool: Welding
+        doAfter: 5
+      - material: Cable
+        amount: 5
+        doAfter: 2
+      - tool: Cutting
+        doAfter: 1
+  - node: commtower3.5
+    entity: CommTower3.5
+    edges:
+    - to: commtower3
+      steps:
+      - material: Cable
+        amount: 5
+        doAfter: 2
+      - tool: Cutting
+        doAfter: 1
+      - tool: Cutting
+        doAfter: 1
+  - node: commtower3
+    entity: CommTower3
+    edges:
+    - to: commtower4
+      steps:
+      - material: Steel
+        amount: 5
+        doAfter: 3
+      - tool: Welding
+        doAfter: 5
+  - node: commtower4
+    entity: CommTower4
+    edges:
+    - to: commtower5
+      steps:
+      - material: Steel
+        amount: 5
+        doAfter: 3
+      - tool: Welding
+        doAfter: 5
+      - material: Plasteel
+        amount: 5
+        doAfter: 3
+      - tool: Welding
+        doAfter: 8
+  - node: commtower5
+    entity: CommTower5
+    edges:
+    - to: commtower6
+      steps:
+      - material: Plasteel
+        amount: 5
+        doAfter: 3
+      - tool: Welding
+        doAfter: 8
+      - material: Cable
+        amount: 10
+        doAfter: 4
+  - node: commtower6
+    entity: CommTower6
+    edges:
+    - to: commtower7
+      steps:
+      - material: Steel
+        amount: 10
+        doAfter: 5
+      - tool: Welding
+        doAfter: 10
+  - node: commtower7
+    entity: CommTower7
+    edges:
+    - to: commtower8
+      steps:
+      - material: Plasteel
+        amount: 10
+        doAfter: 5
+      - tool: Welding
+        doAfter: 10
+      - material: Cable
+        amount: 15
+        doAfter: 7
+  - node: commtower8
+    entity: CommTower8
+    edges:
+    - to: commtower9
+      steps:
+      - material: Plasteel
+        amount: 15
+        doAfter: 7
+      - tool: Welding
+        doAfter: 15
+  - node: commtower9
+    entity: CommTower9
+    edges:
+    - to: commtower10
+      steps:
+      - material: Steel
+        amount: 20
+        doAfter: 10
+      - tool: Welding
+        doAfter: 20
+      - material: Plasteel
+        amount: 20
+        doAfter: 10
+  - node: commtower10
+    entity: GoalCommTowerFinished
