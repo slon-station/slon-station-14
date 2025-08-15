@@ -5,8 +5,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-server-currency-name-singular = Goob Coin
-server-currency-name-plural = Goob Coins
+server-currency-name-singular = Slon Coin
+server-currency-name-plural = Slon Coins
 
 ## Commands
 
