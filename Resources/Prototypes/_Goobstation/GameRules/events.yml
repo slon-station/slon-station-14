@@ -47,3 +47,25 @@
       min: 1
       max: 1
       pickPlayer: false
+
+- type: entity # slon
+  parent: BaseGameRule
+  id: MaintenanceSpiderSpawn
+  components:
+  - type: GameRule
+    chaosScore: 75 # less than the tarantula spawn because it spawns only 1 spider instead of a ton of tarantulas.
+  - type: StationEvent
+    weight: 2
+    startAnnouncement: station-event-vent-creatures-start-announcement
+    startAudio:
+      path: /Audio/Announcements/aliens.ogg
+    earliestStart: 10
+    minimumPlayers: 15
+    duration: 30
+    chaos:
+      Hostile: 10 # 1 not hostile spider...
+      Medical: 20
+    eventType: HostilesSpawn
+  - type: VentCrittersRule
+    table:
+      id: MobMaintSpider

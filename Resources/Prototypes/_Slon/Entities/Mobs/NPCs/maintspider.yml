@@ -1,0 +1,136 @@
+- type: entity
+  id: MobMaintSpider
+  name: maintenance spider
+  description: Widely recognized to be the literal worst thing in existence, but not quite.
+  suffix: AI, Grown
+  parent: MobSpiderBase
+  components:
+  - type: GhostRole
+    makeSentient: true
+    name: ghost-role-information-maint-spider-name
+    description: ghost-role-information-maint-spider-desc
+    rules: ghost-role-information-maint-spider-rules
+    mindRoles:
+    - MindRoleGhostRoleTeamAntagonist
+    raffle:
+      settings: short
+  - type: GhostTakeoverAvailable
+  - type: Sprite
+    drawdepth: SmallMobs
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: spider
+      sprite: _Slon/Objects/Fun/SpecialSpiders/maintspider.rsi
+  - type: DamageStateVisuals
+    rotate: true
+    states:
+      Alive:
+        Base: spider
+      Critical:
+        Base: dead
+      Dead:
+        Base: dead
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        mask:
+        - SmallMobMask
+        layer:
+        - SmallMobLayer
+  - type: Tag
+    tags: # removed bumdoor opener
+    - FootstepSound
+  - type: MeleeWeapon
+    altDisarm: false
+    angle: 0
+    animation: WeaponArcBite
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    damage:
+      types:
+        Piercing: 6
+  - type: SolutionContainerManager
+    solutions:
+      melee:
+        reagents:
+        - ReagentId: ChloralHydrate # to compensate for the low damage
+          Quantity: 50 # 5u, the space spider value halved
+  - type: LanguageKnowledge # Einstein Engines - Language
+    speaks:
+    - Xeno
+    understands:
+    - TauCetiBasic # "Hos ive got you a new shiva!" also they are not evil by default so they could be pets
+    - Xeno
+  - type: EggLayer
+    eggSpawn:
+    - id: EggMaintSpiderFertilized
+    hungerUsage: 20
+    eggLayAction: MouseMultiply
+    hungerRequired: true
+  - type: Hunger
+    startingHunger: 19
+    thresholds:
+      Overfed: 80
+      Okay: 60
+      Peckish: 30
+      Starving: 1
+      Dead: 0
+    baseDecayRate: -0.1 # i dont want it to be like a ratking, the only purpose of these spiders is to make maints more unsafe
+  - type: WebPassageAction
+  - type: Appearance
+
+- type: entity
+  id: MobMaintSpiderling
+  parent: MobSpiderBase
+  name: spiderling
+  description: Look at this cutie!
+  components:
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      45: Dead
+  - type: DamageStateVisuals
+    rotate: true
+    states:
+      Alive:
+        Base: spiderling
+      Critical:
+        Base: dead
+      Dead:
+        Base: dead
+  - type: Appearance
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100 # cant walk under the tables or airlocks because ingame they would run away constantly
+        mask:
+          - MidImpassable
+  - type: Sprite
+    drawdepth: SmallMobs
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: spiderling
+      sprite: _Slon/Objects/Fun/SpecialSpiders/maintspiderling.rsi
+  - type: Tag
+    tags: # removed bumdoor opener
+    - FootstepSound
+  - type: MeleeWeapon
+    altDisarm: false
+    angle: 0
+    animation: WeaponArcBite
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    damage:
+      types:
+        Piercing: 3
+  - type: TimedDespawn # it wouldve been peak to make a normal logic for this, but there is no "TriggerOnTime" or something
+    lifetime: 150
+  - type: SpawnOnDespawn # also one of the reasons why it isnt a ghostrole, it wipes mind
+    prototype: MobMaintSpider
