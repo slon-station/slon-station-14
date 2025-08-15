@@ -22,7 +22,7 @@
   defaultSkinTone: "#985629"
   markingLimits: MobVulpkaninMarkingLimits
   dollPrototype: MobVulpkaninDummy
-  skinColoration: Hues
+  skinColoration: AnimalFur # Slon :trollface:
   maleFirstNames: NamesVulpakinMale
   femaleFirstNames: NamesVulpakinFemale
   lastNames: NamesVulpakinLast

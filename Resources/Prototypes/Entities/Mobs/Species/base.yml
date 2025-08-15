@@ -495,7 +495,8 @@
     penetrateDamage: 50
     damagePenalty: 0.2
   - type: ExaminableCharacter # WWDP
-  # - type: Sprinter # Goobstation # Slon
+  - type: Sprinter # Goobstation
+    canSprint: false # Slon :trollface:
 
 - type: entity
   save: false
