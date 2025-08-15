@@ -242,7 +242,6 @@
       - Burst
       #- FullAuto # Goobstation - start
       #- SemiAuto
-      selectedMode: Burst
       shotsPerBurst: 5
       burstCooldown: 0.5 # Goobstation - end
     - type: ItemSlots
