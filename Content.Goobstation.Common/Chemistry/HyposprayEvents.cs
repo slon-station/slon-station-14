@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-namespace Content.Goobstation.Shared.Chemistry.Hypospray;
+namespace Content.Goobstation.Common.Chemistry;
 
 /// <summary>
 /// Raised on a hypospray when it successfully injects.
@@ -11,6 +11,12 @@ namespace Content.Goobstation.Shared.Chemistry.Hypospray;
 [ByRefEvent]
 public record struct AfterHyposprayInjectsEvent()
 {
+    public AfterHyposprayInjectsEvent(EntityUid user, EntityUid target) : this()
+    {
+        User = user;
+        Target = target;
+    }
+
     /// <summary>
     /// Entity that used the hypospray.
     /// </summary>

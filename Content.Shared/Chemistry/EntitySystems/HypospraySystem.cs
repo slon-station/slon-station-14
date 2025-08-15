@@ -21,7 +21,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-using Content.Shared.Chemistry.EntitySystems;
+using Content.Goobstation.Common.Chemistry;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Hypospray.Events;
@@ -174,6 +174,10 @@ public sealed class HypospraySystem : EntitySystem
             // TODO: This should just be using melee attacks...
             // meleeSys.SendLunge(angle, user);
         }
+
+        // Slon - autoinjectors
+        var hypoevent = new AfterHyposprayInjectsEvent(user, target);
+        RaiseLocalEvent(entity, ref hypoevent);
 
         _audio.PlayPredicted(component.InjectSound, target, user);
 
