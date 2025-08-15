@@ -92,9 +92,6 @@
 # SPDX-FileCopyrightText: 2024 themias <89101928+themias@users.noreply.github.com>
 # SPDX-FileCopyrightText: 2024 Арт <123451459+JustArt1m@users.noreply.github.com>
 # SPDX-FileCopyrightText: 2025 Aiden <28298836+Aidenkrz@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2025 GoobBot <uristmchands@proton.me>
-# SPDX-FileCopyrightText: 2025 Hanz <41141796+Hanzdegloker@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2025 TurboTracker <130304754+TurboTrackerss14@users.noreply.github.com>
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -150,10 +147,6 @@
   - type: Storage
     grid:
     - 0,0,4,1
-    whitelist: #Goobstation - whitelisted cig pack strorage
-      tags:
-      - Cigarette
-      - Lighter
   - type: StorageFill
     contents:
     - id: Cigarette
@@ -223,10 +216,6 @@
   - type: Storage
     grid:
     - 0,0,4,1
-    whitelist: #Goobstation - whitelisted cig pack strorage
-      tags:
-      - Cigarette
-      - Lighter
   - type: ItemCounter
     count:
       tags: [Cigarette]
