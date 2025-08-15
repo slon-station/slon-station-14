@@ -239,10 +239,11 @@ public abstract class SharedJobSystem : EntitySystem
     // Goobstation Change: Returns the amount of Goobcoins a player will receive when they finish a round as this job.
     public int GetJobGoobcoins(ICommonSession player)
     {
-        if (_playerSystem.ContentData(player) is not { Mind: { } mindId }
-            || !MindTryGetJob(mindId, out var prototype))
-            return 1;
+        return 10; // Slon - communism
+        //if (_playerSystem.ContentData(player) is not { Mind: { } mindId }
+        //    || !MindTryGetJob(mindId, out var prototype))
+        //    return 1;
 
-        return prototype.Goobcoins;
+        //return prototype.Goobcoins;
     }
 }
