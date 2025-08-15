@@ -75,3 +75,9 @@
   name: collective-mind-bingle
   keycode: 'w'
   color: "#386a9b"
+
+- type: collectiveMind # slon
+  id: Spidermind
+  name: collective-mind-spider
+  keycode: 'i'
+  color: "#8C8C8C"

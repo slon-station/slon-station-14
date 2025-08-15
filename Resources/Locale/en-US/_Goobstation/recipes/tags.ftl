@@ -39,3 +39,4 @@ construction-graph-tag-welding-mask = welding mask
 construction-graph-tag-plant-clipper = plant clipper
 construction-graph-tag-item-pickaxe = pickaxe
 construction-graph-tag-hardhat = hardhat
+construction-graph-tag-spray-painter = spray painter

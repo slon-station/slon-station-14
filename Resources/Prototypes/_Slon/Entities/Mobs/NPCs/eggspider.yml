@@ -1,0 +1,10 @@
+- type: entity
+  id: EggMaintSpiderFertilized
+  parent: EggSpiderFertilized
+  components:
+  - type: TimedSpawner
+    prototypes:
+    - MobMaintSpiderling
+    intervalSeconds: 60
+    minimumEntitiesSpawned: 1
+    maximumEntitiesSpawned: 1
