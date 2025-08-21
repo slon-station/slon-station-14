@@ -151,6 +151,9 @@
     - !type:DepartmentTimeRequirement
       department: Security
       time: 36000 # 10 hrs
+    - !type:PronounMatchesSexRequirement
+    - !type:SkinToneRequirement
+      maxHumanSkinTone: 80
   #  - !type:StyleRequirement
   #    styles:
   #    - HumanHairFloorlengthBedhead

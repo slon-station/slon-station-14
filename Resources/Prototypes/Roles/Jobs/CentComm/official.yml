@@ -44,6 +44,9 @@
   requirements:
   - !type:AgeRequirement
     requiredAge: 21
+  - !type:PronounMatchesSexRequirement
+  - !type:SkinToneRequirement
+    maxHumanSkinTone: 80
   accessGroups:
   - AllAccess
   access:

@@ -25,6 +25,11 @@ role-timer-blacklisted-species = Your character must not be one of the following
 role-timer-whitelisted-traits = Your character must have one of the following traits for you to select this:
 role-timer-blacklisted-traits = Your character must not have any of the following traits for you to select this:
 
+# Additional requirement messages
+role-requirements-pronouns-mismatch = Your pronouns do not match your selected sex.
+role-requirements-skin-tone = Your skin tone must be at or below [color=yellow]{$tone}%[/color] for this role.
+role-requirements-skin-tone-inverted = Your skin tone must be above [color=yellow]{$tone}%[/color] for this role.
+
 role-timer-locked = Locked (hover for details)
 
 role-timer-department-unknown = Unknown Department

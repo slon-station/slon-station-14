@@ -102,6 +102,9 @@
       time: 180000  #50 hours
     - !type:AgeRequirement
       requiredAge: 21
+    - !type:PronounMatchesSexRequirement
+    - !type:SkinToneRequirement
+      maxHumanSkinTone: 80
   weight: 20
   startingGear: NanotrasenRepresentativeGear
   icon: "JobIconNanotrasenRepresentative"

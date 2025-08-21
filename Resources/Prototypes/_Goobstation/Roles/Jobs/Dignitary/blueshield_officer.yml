@@ -45,6 +45,9 @@
       time: 90000 # 25 hours
     - !type:AgeRequirement
       requiredAge: 21
+    - !type:PronounMatchesSexRequirement
+    - !type:SkinToneRequirement
+      maxHumanSkinTone: 80
   goobcoins: 45
   weight: 20
   startingGear: BlueshieldOfficerGear

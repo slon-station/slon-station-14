@@ -154,6 +154,9 @@
     - !type:DepartmentTimeRequirement
       department: Command
       time: 14400 # 4 hours
+    - !type:PronounMatchesSexRequirement
+    - !type:SkinToneRequirement
+      maxHumanSkinTone: 80
       #any MRP using our code might eventually want to use it
     # - !type:SaturationRequirement # MisandryBox - no neon hair on captain
     #   hairColorSaturation: 0.30
