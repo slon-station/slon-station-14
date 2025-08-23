@@ -26,13 +26,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-# Slon - this is pending removal due to being secoff+ but whatever for now
-
 - type: job
   id: BlueshieldOfficer
   name: Blueshield Officer
   description: "Act as a bodyguard and advisor for Command and CentCom VIPs."
   playTimeTracker: JobBlueshieldOfficer
+  setPreference: false # Slon
   requirements:
     - !type:DepartmentTimeRequirement
       department: Command

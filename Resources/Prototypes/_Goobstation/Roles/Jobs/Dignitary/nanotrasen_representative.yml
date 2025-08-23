@@ -109,7 +109,7 @@
   joinNotifyCrew: true
   supervisors: job-supervisors-centcom
   canBeAntag: false
-  setPreference: false # Slon - useless role
+  setPreference: false # Slon
   goobcoins: 40
   access:
   - Security

@@ -60,8 +60,8 @@
           availableJobs:
             #service
             Captain: [ 1, 1 ]
-            NanotrasenRepresentative: [ 1, 1 ]
-            BlueshieldOfficer: [ 1, 1 ]
+            # NanotrasenRepresentative: [ 1, 1 ]
+            # BlueshieldOfficer: [ 1, 1 ]
             HeadOfPersonnel: [ 1, 1 ]
             Bartender: [ 2, 2 ]
             Botanist: [ 3, 3 ]
@@ -92,7 +92,7 @@
             Detective: [ 1, 1 ]
             SecurityCadet: [ 6, 6 ]
             Lawyer: [ 3, 3 ]
-            Brigmedic: [ 1, 1 ]
+            # Brigmedic: [ 1, 1 ]
             #supply
             Quartermaster: [ 1, 1 ]
             SalvageSpecialist: [ 6, 6 ]
