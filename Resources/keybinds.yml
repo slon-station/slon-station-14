@@ -177,9 +177,9 @@ binds:
 - function: Walk
   type: State
   key: Shift
-- function: Sprint
-  type: State
-  key: C
+#- function: Sprint
+#  type: State
+#  key: C
 - function: ToggleStanding
   type: State
   key: R
