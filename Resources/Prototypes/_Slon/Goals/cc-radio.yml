@@ -1,0 +1,22 @@
+- type: entity
+  parent: [BaseItem, BaseCommandContraband]
+  id: CentComRadio
+  name: command radio
+  description: A radio, that can be used to sent a request for a station goal. Cant be done after 5 minutes into the shift.
+  components:
+  - type: Sprite
+    sprite: _Slon/Objects/Goals/comms.rsi
+    state: walkietalkie_cc
+  - type: RadioSpeaker
+    channels:
+    - CentCom
+  - type: Speech
+    speechVerb: Robotic
+  - type: Tag
+    tags:
+    - Radio
+  - type: TelecomExempt
+  - type: RadioMicrophone
+    broadcastChannel: CentCom
+  - type: StationGoalToggler
+  - type: RoundStationGoal # todo put inside cap locker

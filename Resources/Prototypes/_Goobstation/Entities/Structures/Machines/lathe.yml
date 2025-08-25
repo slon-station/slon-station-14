@@ -217,6 +217,8 @@
     # Einstein Engines Packs
     - Translators
     - TranslatorImplanters
+    # slon packs
+    - CommunicationTower
   - type: EmagLatheRecipes
     emagDynamicPacks:
     - MechBoardsSecurity

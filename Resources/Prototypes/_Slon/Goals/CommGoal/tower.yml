@@ -1,0 +1,171 @@
+- type: entity
+  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  id: GoalCommTowerFinished
+  name: communication tower
+  suffix: finished
+  description: A large structure, used to shield the station from outer signals, and generate points.
+  components:
+  - type: Sprite
+    sprite: _Slon/Objects/Goals/comm_tower2.rsi
+    state: comm_tower
+    drawdepth: Overdoors
+    noRot: true
+    offset: "0, 1"
+  - type: CommTower
+  - type: InteractionOutline
+  - type: SpriteFade
+  - type: Physics
+    bodyType: Static
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    node: commtower10
+    graph: CommTower
+  - type: ActivatableUI
+    key: enum.ResearchClientUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.ResearchClientUiKey.Key:
+        type: ResearchClientBoundUserInterface
+  - type: ResearchClient
+  - type: ResearchPointSource
+    pointspersecond: 7
+    active: true
+
+- type: entity
+  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  id: CommTowerBase
+  name: communication tower shield
+  description: It appears to lack some crucial parts... Maybe try to add steel?
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _Slon/Objects/Goals/comm_tower2.rsi
+    drawdepth: Overdoors
+    noRot: true
+    offset: "0, 1"
+  - type: Construction
+    graph: CommTower
+  - type: InteractionOutline
+  - type: SpriteFade
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CommTowerBase
+  id: CommTower1
+  suffix: unfinished
+  components:
+  - type: Sprite
+    state: construct_0_0
+  - type: Construction
+    node: start
+  - type: Machine
+    board: GoalCommunicationShieldCircuitBoard
+
+- type: entity
+  id: CommTower2
+  categories: [ HideSpawnMenu ]
+  parent: CommTowerBase
+  components:
+  - type: Sprite
+    state: construct_1_0
+  - type: Construction
+    node: commtower2
+
+- type: entity
+  id: CommTower3
+  categories: [ HideSpawnMenu ]
+  parent: CommTowerBase
+  components:
+  - type: Sprite
+    state: construct_2_0
+  - type: Construction
+    node: commtower3
+
+- type: entity
+  id: CommTower3.5
+  categories: [ HideSpawnMenu ]
+  parent: CommTowerBase
+  description: It appears to lack some crucial parts... Maybe try to add some cables?
+  components:
+  - type: Sprite
+    state: construct_2_1
+  - type: Construction
+    node: commtower3.5
+
+- type: entity
+  id: CommTower4
+  categories: [ HideSpawnMenu ]
+  parent: CommTowerBase
+  components:
+  - type: Sprite
+    state: construct_3_1
+  - type: Construction
+    node: commtower4
+
+- type: entity
+  id: CommTower5
+  categories: [ HideSpawnMenu ]
+  parent: CommTowerBase
+  description: It appears to lack some crucial parts... Maybe try to add plasteel?
+  components:
+  - type: Sprite
+    state: construct_4_0
+  - type: Construction
+    node: commtower5
+
+- type: entity
+  id: CommTower6
+  categories: [ HideSpawnMenu ]
+  parent: CommTowerBase
+  components:
+  - type: Sprite
+    state: construct_5_0
+  - type: Construction
+    node: commtower6
+
+- type: entity
+  id: CommTower7
+  categories: [ HideSpawnMenu ]
+  parent: CommTowerBase
+  description: It appears to lack some crucial parts... Maybe try to add plasteel?
+  components:
+  - type: Sprite
+    state: construct_6_0
+  - type: Construction
+    node: commtower7
+
+- type: entity
+  id: CommTower8
+  categories: [ HideSpawnMenu ]
+  parent: CommTowerBase
+  description: It appears to lack some crucial parts... Maybe try to add plasteel?
+  components:
+  - type: Sprite
+    state: construct_7_1
+  - type: Construction
+    node: commtower8
+
+- type: entity
+  id: CommTower9
+  categories: [ HideSpawnMenu ]
+  parent: CommTowerBase
+  components:
+  - type: Sprite
+    state: construct_8_0
+  - type: Construction
+    node: commtower9

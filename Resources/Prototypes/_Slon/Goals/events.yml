@@ -1,0 +1,31 @@
+- type: entity
+  parent: BaseTraitorRule
+  id: SleeperAgentsGoalEnd
+  name: Massive Sleeper Agents
+  components:
+  - type: StationEvent
+    earliestStart: 999
+    weight: 0 # this should make it not appear by itself, right?...
+    minimumPlayers: 1
+    maxOccurrences: 1
+    startAnnouncement: station-event-communication-interception-massive
+    startAudio:
+      path: /Audio/Announcements/intercept.ogg
+    duration: null
+    occursDuringRoundEnd: false
+    eventType: HostilesSpawn # Goobstation
+  - type: GameRule
+    chaosScore: 0
+  - type: AlertLevelInterceptionRule
+  - type: AntagSelection
+    definitions:
+    - prefRoles: [ TraitorSleeper ]
+      fallbackRoles: [ Traitor ]
+      min: 2
+      max: 6
+      playerRatio: 1
+      blacklist:
+        components:
+        - AntagImmune
+      mindRoles:
+      - MindRoleTraitorSleeper

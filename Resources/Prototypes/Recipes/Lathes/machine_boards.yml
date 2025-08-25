@@ -277,6 +277,13 @@
   icon: { sprite: Structures/Machines/Anomaly/ape.rsi, state: base } # Goobstation
   result: APECircuitboard
 
+# slon
+- type: latheRecipe
+  parent: [ BaseCircuitboardRecipe, BaseResearchMachineRecipeCategory ]
+  id: GoalCommunicationShieldCircuitBoard
+  icon: { sprite: _Slon/Objects/Goals/comm_tower2.rsi, state: comm_tower }
+  result: GoalCommunicationShieldCircuitBoard
+
 ## Service
 
 - type: latheRecipe

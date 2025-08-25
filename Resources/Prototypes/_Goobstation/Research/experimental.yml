@@ -80,3 +80,19 @@
   position: -4,0
   technologyPrerequisites:
   - AdvancedAnomalyResearch
+
+# slon
+- type: technology
+  id: CommunicationShieldGoal
+  name: research-technology-goal-communication-shield
+  icon:
+    sprite: _Slon/Objects/Goals/comm_tower2.rsi
+    state: comm_tower
+  discipline: Experimental
+  tier: 2
+  cost: 10000
+  recipeUnlocks:
+  - GoalCommunicationShieldCircuitBoard
+  position: -5,0
+  technologyPrerequisites:
+  - ExperimentalScience
