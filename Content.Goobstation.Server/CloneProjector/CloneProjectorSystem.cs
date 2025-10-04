@@ -324,7 +324,7 @@ public sealed partial class CloneProjectorSystem : SharedCloneProjectorSystem
         if (doCooldown)
             DoCooldown(projector);
 
-        Dirty(projector);
+        Dirty(clone, projector.Comp);
         return true;
     }
 

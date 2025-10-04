@@ -87,7 +87,6 @@
   - MineralScannerEmpty
   - OreProcessorIndustrialMachineCircuitboard
   - ClothingMaskWeldingGas
-  - ClothingShoesBootsJump
   # Goobstation R&D Console rework start
   position: 0,-4
   technologyPrerequisites:
@@ -257,7 +256,6 @@
   - ThrusterMachineCircuitboard
   - GyroscopeMachineCircuitboard
   - MiniGravityGeneratorCircuitboard
-  - MachineFTLDriveCircuitboard # Frontier
   # Goobstation R&D Console rework start
   position: 2,-4
   technologyPrerequisites:

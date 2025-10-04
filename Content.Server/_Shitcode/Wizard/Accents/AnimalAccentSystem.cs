@@ -5,7 +5,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-using Content.Shared.Speech;
+using Content.Server.Speech;
 using Robust.Shared.Random;
 
 namespace Content.Server._Goobstation.Wizard.Accents;

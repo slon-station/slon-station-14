@@ -25,7 +25,6 @@ chat-emote-msg-trill = trills!
 chat-emote-msg-warble = warbles!
 chat-emote-msg-wurble = wurbles!
 chat-emote-msg-mars = mars.
-chat-emote-msg-bagawk = bagawks!
 
 
 # Misc

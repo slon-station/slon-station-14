@@ -95,14 +95,11 @@
   - type: Alerts
   - type: ProtectedFromStepTriggers
   - type: Targeting # Shitmed Change
-  # <Goobstation>
-  - type: FlashVulnerable
-  - type: TypingIndicator
+  - type: TypingIndicator # Goob
     proto: robot
-  - type: Speech
+  - type: Speech # Goob
     speechVerb: Robotic
     speechSounds: Borg
-  # </Goobstation>
 
 - type: entity
   name: drone
@@ -152,7 +149,7 @@
   - type: IntrinsicUI # Goob edit
     uis:
       enum.StationMapUiKey.Key:
-        toggleAction: ActionShowStationMap
+        toggleAction: ActionDroneOpenMap
       enum.InstrumentUiKey.Key:
         toggleAction: ActionDronePlayMidi
   - type: StationMap #imp
@@ -192,7 +189,6 @@
     - Stun
     - KnockedDown
     - SlowedDown
-    - Flashed # Goobstation - counter to shitter drones
   - type: SlowOnDamage
     speedModifierThresholds:
       30: 0.7

@@ -33,7 +33,7 @@ public sealed class SurgeryToolConditionsSystem : EntitySystem
 
     private void OnToggleUsed(Entity<ItemToggleComponent> ent, ref SurgeryToolUsedEvent args)
     {
-        if (ent.Comp.Activated || args.IgnoreToggle)
+        if (ent.Comp.Activated)
             return;
 
         _popup.PopupEntity(Loc.GetString("surgery-tool-turn-on"), ent, args.User);

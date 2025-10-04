@@ -9,7 +9,7 @@
 using Content.Shared.Chemistry.Reagent;
 using Content.Goobstation.Maths.FixedPoint;
 using Robust.Shared.Serialization;
-using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
 namespace Content.Shared.Random;
 
@@ -35,6 +35,6 @@ public sealed partial class RandomFillSolution
     /// <summary>
     ///     Listed reagents that the weight and quantity apply to.
     /// </summary>
-    [DataField(required: true)]
-    public List<ProtoId<ReagentPrototype>> Reagents = new();
+    [DataField("reagents", required: true, customTypeSerializer: typeof(PrototypeIdListSerializer<ReagentPrototype>))]
+    public List<string> Reagents = new();
 }

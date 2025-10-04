@@ -8,9 +8,11 @@ using System.Linq;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server._EinsteinEngines.Atmos.Components;
+using Content.Server._EinsteinEngines.Bed.Components;
+using Content.Server.Bed.Components;
 using Content.Server.Cloning.Components;
 using Content.Shared._Shitmed.Targeting;
-using Content.Shared.Bed.Components;
+using Content.Shared._Shitmed.Body.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Inventory;
@@ -125,7 +127,7 @@ public sealed class IgniteFromGasSystem : EntitySystem
             if (ignite.FireStacksPerUpdate == 0 ||
                 mobState.CurrentState is MobState.Dead ||
                 HasComp<BeingClonedComponent>(uid) ||
-                HasComp<StasisBedBuckledComponent>(uid) ||
+                HasComp<InStasisComponent>(uid) ||
                 _atmos.GetContainingMixture(uid, excite: true) is not { } gas ||
                 gas[(int) ignite.Gas] < ignite.MolesToIgnite
                 )

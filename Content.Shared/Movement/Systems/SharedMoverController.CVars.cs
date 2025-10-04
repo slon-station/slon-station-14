@@ -31,7 +31,6 @@ public abstract partial class SharedMoverController
         if (session.Channel is not { } channel) return;
 
         ent.Comp.DefaultSprinting = _netConfig.GetClientCVar(channel, CCVars.DefaultWalk);
-        RaiseLocalEvent(ent, new SprintingInputEvent(ent)); // WD EDIT
     }
 
     private void OnMindRemoved(Entity<InputMoverComponent> ent, ref MindRemovedMessage args)
@@ -46,6 +45,5 @@ public abstract partial class SharedMoverController
             return;
 
         mover.DefaultSprinting = _netConfig.GetClientCVar(args.SenderSession.Channel, CCVars.DefaultWalk);
-        RaiseLocalEvent(uid, new SprintingInputEvent((uid, mover))); // WD EDIT
     }
 }

@@ -16,18 +16,18 @@
   parent: BaseStationEventShortDelay
   components:
   - type: StationEvent
-    earliestStart: 50
-    weight: 3
+    earliestStart: 20
+    weight: 8
     duration: 50
-    minimumPlayers: 50
+    minimumPlayers: 15
     chaos: # Goobstation
-      Hostile: 200
+      Hostile: 100
       Friend: 20
-      Combat: 200
-      Death: 200
-      Medical: 200
+      Combat: 100
+      Death: 100
+      Medical: 100
     eventType: HostilesSpawn
   - type: GameRule
-    chaosScore: 600
+    chaosScore: 400
   - type: RandomSpawnRule
     prototype: SpawnPointGhostBinglePrime

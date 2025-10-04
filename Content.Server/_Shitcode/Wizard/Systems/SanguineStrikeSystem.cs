@@ -15,7 +15,6 @@ using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Goobstation.Maths.FixedPoint;
-using Content.Shared.Body.Components;
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
@@ -150,8 +149,8 @@ public sealed class SanguineStrikeSystem : SharedSanguineStrikeSystem
         }
 
         var restoredBlood = FixedPoint2.Min(tempSol.Volume, missingBlood);
-        _bloodStream.TryModifyBloodLevel((user, userBlood), restoredBlood);
-        _bloodStream.TryModifyBleedAmount((user, userBlood), -userBlood.BleedAmount);
+        _bloodStream.TryModifyBloodLevel(user, restoredBlood, userBlood);
+        _bloodStream.TryModifyBleedAmount(user, -userBlood.BleedAmount, userBlood);
         if (restoredBlood >= tempSol.Volume || tempSol.Volume <= 0 || tempSol.Contents.Count <= 0)
             return;
 

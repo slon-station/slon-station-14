@@ -5,7 +5,6 @@
 # SPDX-FileCopyrightText: 2025 Aiden <28298836+Aidenkrz@users.noreply.github.com>
 # SPDX-FileCopyrightText: 2025 Aidenkrz <aiden@djkraz.com>
 # SPDX-FileCopyrightText: 2025 Aineias1 <142914808+Aineias1@users.noreply.github.com>
-# SPDX-FileCopyrightText: 2025 August Eymann <august.eymann@gmail.com>
 # SPDX-FileCopyrightText: 2025 CerberusWolfie <wb.johnb.willis@gmail.com>
 # SPDX-FileCopyrightText: 2025 GoobBot <uristmchands@proton.me>
 # SPDX-FileCopyrightText: 2025 John Willis <143434770+CerberusWolfie@users.noreply.github.com>
@@ -159,18 +158,6 @@
         whitelist:
           tags:
           - EmergencyNitrogenTank
-      battery:
-        whitelist:
-          tags:
-          - DisposableBattery
-      welder:
-        whitelist:
-          tags:
-          - WeldingTool
-      cable:
-        whitelist:
-          tags:
-          - CableCoil
 
 
 - type: entity
@@ -267,7 +254,7 @@
       tank:
       - ExtendedEmergencyOxygenTankFilled
       mask:
-      - ClothingMaskGasSecurity
+      - ClothingMaskBreath
       emergencypen:
       - EmergencyMedipen
       spacepen:
@@ -291,7 +278,7 @@
       tank:
       - ExtendedEmergencyNitrogenTankFilled
       mask:
-      - ClothingMaskGasSecurity
+      - ClothingMaskBreath
       emergencypen:
       - EmergencyMedipen
       spacepen:
@@ -528,7 +515,6 @@
   - type: Label
     currentLabel: reagent-name-nitrogen
 
-
 ## EE PLASMAMEN
 
 - type: entity
@@ -597,7 +583,7 @@
       tank:
       - ExtendedEmergencyPlasmaTankFilled
       mask:
-      - ClothingMaskGasSecurity
+      - ClothingMaskBreath
       emergencypen:
       - EmergencyMedipen
       spacepen:
@@ -706,50 +692,3 @@
       - SpaceMedipen
   - type: Label
     currentLabel: reagent-name-plasma
-
-- type: entity
-  parent: BoxSurvivalSlots
-  id: BoxSurvivalSlotsSilicon
-  name: silicon survival box
-  description: It's a box with basic tools for self-repair inside.
-  components:
-  - type: ContainerContainer
-    containers:
-      battery: !type:ContainerSlot
-      flare: !type:ContainerSlot
-      welder: !type:ContainerSlot
-      cable: !type:ContainerSlot
-  - type: ItemSlots
-    slots:
-      battery:
-        ejectOnInteract: false
-        whitelist:
-          tags:
-          - DisposableBattery
-      flare:
-        ejectOnInteract: false
-        whitelist:
-          tags:
-          - Flare
-      welder:
-        ejectOnInteract: false
-        whitelist:
-          tags:
-          - WeldingTool
-      cable:
-        ejectOnInteract: false
-        whitelist:
-          tags:
-          - CableCoil
-  - type: ContainerFill
-    containers:
-      battery:
-      - BatteryDisposable
-      flare:
-      - Flare
-      welder:
-      - WelderMini
-      cable:
-      - CableApcStack10
-  - type: Sprite
-    state: box_silicon

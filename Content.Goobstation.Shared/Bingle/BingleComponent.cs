@@ -9,9 +9,11 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-using Robust.Shared.Prototypes;
+using System;
+using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
+using Robust.Shared.Serialization.Manager.Attributes;
 
 namespace Content.Goobstation.Shared.Bingle;
 
@@ -24,8 +26,6 @@ public sealed partial class BingleComponent : Component
     public bool Prime = false;
     [DataField]
     public EntityUid? MyPit;
-    [DataField]
-    public EntProtoId? UpgradedID;
 }
 
 [Serializable, NetSerializable]

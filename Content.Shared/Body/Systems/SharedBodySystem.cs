@@ -28,7 +28,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 // Shitmed Change
-using Content.Goobstation.Common.Body;
 using Content.Shared.Inventory;
 using Robust.Shared.Random;
 
@@ -62,11 +61,8 @@ public abstract partial class SharedBodySystem : EntitySystem
     [Dependency] protected readonly SharedContainerSystem Containers = default!;
     [Dependency] protected readonly SharedTransformSystem SharedTransform = default!;
     [Dependency] protected readonly StandingStateSystem Standing = default!;
-    // <Shitmed>
-    [Dependency] private readonly CommonInsideBodyPartSystem _insideBodyPart = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    // </Shitmed>
+    [Dependency] private readonly IRobustRandom _random = default!; // Shitmed Change
+    [Dependency] private readonly InventorySystem _inventory = default!; // Shitmed Change
 
     public override void Initialize()
     {

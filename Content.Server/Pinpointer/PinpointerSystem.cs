@@ -23,14 +23,12 @@ using System.Linq;
 using System.Numerics;
 using Robust.Shared.Utility;
 using Content.Server.Shuttles.Events;
-using Content.Shared.Alert;
 using Content.Shared.Whitelist;
 
 namespace Content.Server.Pinpointer;
 
 public sealed class PinpointerSystem : SharedPinpointerSystem
 {
-    [Dependency] private readonly AlertsSystem _alerts = default!; // WD EDIT
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
@@ -41,27 +39,9 @@ public sealed class PinpointerSystem : SharedPinpointerSystem
         base.Initialize();
         _xformQuery = GetEntityQuery<TransformComponent>();
 
-        // WD EDIT START
-        SubscribeLocalEvent<PinpointerComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<PinpointerComponent, ComponentShutdown>(OnShutdown);
-        // WD EDIT END
         SubscribeLocalEvent<PinpointerComponent, ActivateInWorldEvent>(OnActivate);
         SubscribeLocalEvent<FTLCompletedEvent>(OnLocateTarget);
     }
-
-    // WD EDIT START
-    private void OnMapInit(EntityUid uid, PinpointerComponent component, MapInitEvent args)
-    {
-        if (component.Alert.HasValue)
-            _alerts.ShowAlert(uid, component.Alert.Value);
-    }
-
-    private void OnShutdown(EntityUid uid, PinpointerComponent component, ComponentShutdown args)
-    {
-        if (component.Alert.HasValue)
-            _alerts.ClearAlert(uid, component.Alert.Value);
-    }
-    // WD EDIT END
 
     public override bool TogglePinpointer(EntityUid uid, PinpointerComponent? pinpointer = null)
     {
@@ -87,8 +67,7 @@ public sealed class PinpointerSystem : SharedPinpointerSystem
         if (args.Handled || !args.Complex)
             return;
 
-        if (component.CanToggle) // WD EDIT
-            TogglePinpointer(uid, component);
+        TogglePinpointer(uid, component);
 
         if (!component.CanRetarget)
             LocateTarget(uid, component);
@@ -261,10 +240,9 @@ public sealed class PinpointerSystem : SharedPinpointerSystem
             return;
 
         var target = GetNearestTarget((uid, pinpointer)); // Goob edit
-        if (target == null || !Exists(target.Value))
+        if (target == null || !EntityManager.EntityExists(target.Value))
         {
             SetDistance(uid, Distance.Unknown, pinpointer);
-            LocateTarget(uid, pinpointer); // WD EDIT
             return;
         }
 

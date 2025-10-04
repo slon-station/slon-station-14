@@ -61,7 +61,7 @@ public sealed partial class CosmicCultComponent : Component
     /// The duration of the doAfter for Siphon Entropy
     /// </summary>
     [DataField]
-    public TimeSpan CosmicSiphonDelay = TimeSpan.FromSeconds(2.5f);
+    public TimeSpan CosmicSiphonDelay = TimeSpan.FromSeconds(5);
 
     /// <summary>
     /// The duration of the doAfter for Shunt Subjectivity
@@ -136,34 +136,6 @@ public sealed partial class CosmicCultComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public int EntropyStoredCap = 14;
-
-    //Goobstation
-    /// <summary>
-    /// The value at which the monument heals each limb.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public float ShitMedHeal = -3f;
-
-    //Goobstation
-    /// <summary>
-    /// The probability that siphoning entropy while empowered will cause lights to flicker.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public float FlickerProbability = 0.20f;
-
-    //Goobstation
-    /// <summary>
-    /// The probability that siphoning entropy while empowered will cause lights to flicker.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public float FlickerRange = 5f;
-
-    //Goobstation
-    /// <summary>
-    /// The maximum amount of Entropy the user can have at once.
-    /// </summary>
-    //[DataField, AutoNetworkedField]
-    //public int MonumentHealRange = 15; Erm...
 
     /// <summary>
     /// Wether or not this cultist has been empowered by a Malign Rift.

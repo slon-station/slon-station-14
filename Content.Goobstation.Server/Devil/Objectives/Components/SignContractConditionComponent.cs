@@ -13,5 +13,5 @@ namespace Content.Goobstation.Server.Devil.Objectives.Components;
 public sealed partial class SignContractConditionComponent : Component
 {
     [DataField]
-    public int ContractsSigned;
+    public int ContractsSigned = 0;
 }

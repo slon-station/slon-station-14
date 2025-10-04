@@ -9,7 +9,7 @@ namespace Content.Goobstation.Client.Voice;
 /// <summary>
 /// Interface for the voice chat manager.
 /// </summary>
-public interface IVoiceChatManager
+public interface IVoiceChatManager : IDisposable
 {
     /// <summary>
     /// Adds a packet of PCM audio data to the playback queue for a specific entity.
@@ -35,6 +35,4 @@ public interface IVoiceChatManager
 
     void Initalize();
     void Update();
-
-    void Shutdown();
 }

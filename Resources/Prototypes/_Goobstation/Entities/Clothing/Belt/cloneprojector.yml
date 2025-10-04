@@ -33,8 +33,6 @@
     - type: NoSlip
     - type: ZombieImmune
     - type: CrematoriumImmune
-    - type: BreathingImmunity
-    - type: TemperatureImmunity
     - type: TypingIndicator
       proto: robot
     - type: Speech
@@ -74,13 +72,11 @@
       - SlowedDown
       - Pacified
       - Flashed
-    - type: Uncloneable
     - type: Tag
       tags:
       - CanPilot
       - DoorBumpOpener
       - Unimplantable
-      - SiliconEmotes
     removedComponents:
     - type: Destructible
     - type: SurgeryTarget

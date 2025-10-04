@@ -416,10 +416,6 @@
         orGroup: GiftPool
       - id: RGBStaff
         orGroup: GiftPool
-      # WD EDIT START
-      - id: FaceHuggerToys
-        orGroup: GiftPool
-      # WD EDIT END
     sound:
       path: /Audio/Effects/unwrap.ogg
 

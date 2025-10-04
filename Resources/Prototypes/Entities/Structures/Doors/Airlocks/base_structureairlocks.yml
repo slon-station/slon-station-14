@@ -251,8 +251,9 @@
     - board
   - type: PlacementReplacement
     key: walls
-  - type: Paintable
-    group: AirlockStandard
+  - type: PaintableAirlock
+    group: Standard
+    department: Civilian
   - type: StaticPrice
     price: 150
   - type: LightningTarget
@@ -315,10 +316,8 @@
   - type: Construction
     graph: Airlock
     node: glassAirlock
-  - type: Paintable
-    group: AirlockGlass
-  #- type: RadiationBlocker
-  #  resistance: 2
+  - type: PaintableAirlock
+    group: Glass
   - type: Tag
     tags:
       - GlassAirlock

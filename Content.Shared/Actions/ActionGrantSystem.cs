@@ -39,7 +39,6 @@
 // SPDX-FileCopyrightText: 2025 Aviu00 <93730715+Aviu00@users.noreply.github.com>
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
-using  Content.Shared.Inventory;
 
 namespace Content.Shared.Actions;
 
@@ -60,12 +59,11 @@ public sealed class ActionGrantSystem : EntitySystem
 
     private void OnItemGet(Entity<ItemActionGrantComponent> ent, ref GetItemActionsEvent args)
     {
-
         if (!TryComp(ent.Owner, out ActionGrantComponent? grant))
             return;
 
-        // Goobstation - RestrictedSlots
-        if (ent.Comp.ActiveIfWorn && ent.Comp.RestrictedSlots != args.SlotFlags)
+        // Goobstation
+        if (ent.Comp.RestrictSlots && ent.Comp.RestrictedSlots != args.SlotFlags)
             return;
 
         foreach (var action in grant.ActionEntities)

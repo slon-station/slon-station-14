@@ -24,7 +24,6 @@ namespace Content.IntegrationTests.Tests.Guidebook;
 public sealed class GuideEntryPrototypeTests
 {
     [Test]
-    [Ignore("Style update limit in engine is too low")]
     public async Task ValidatePrototypeContents()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });

@@ -24,10 +24,6 @@ namespace Content.Client.Overlays;
 /// </summary>
 public sealed partial class StencilOverlay : Overlay
 {
-    private static readonly ProtoId<ShaderPrototype> CircleShader = "WorldGradientCircle";
-    private static readonly ProtoId<ShaderPrototype> StencilMask = "StencilMask";
-    private static readonly ProtoId<ShaderPrototype> StencilDraw = "StencilDraw";
-
     [Dependency] private readonly IClyde _clyde = default!;
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -54,7 +50,7 @@ public sealed partial class StencilOverlay : Overlay
         _sprite = sprite;
         _weather = weather;
         IoCManager.InjectDependencies(this);
-        _shader = _protoManager.Index(CircleShader).InstanceUnique();
+        _shader = _protoManager.Index<ShaderPrototype>("WorldGradientCircle").InstanceUnique();
     }
 
     protected override void Draw(in OverlayDrawArgs args)

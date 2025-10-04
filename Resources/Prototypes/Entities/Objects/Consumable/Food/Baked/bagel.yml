@@ -74,8 +74,6 @@
   abstract: true
   description: A delicious bagel.
   components:
-  - type: Item
-    size: Tiny
   - type: FlavorProfile
     flavors:
       - bread

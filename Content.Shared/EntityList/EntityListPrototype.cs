@@ -9,6 +9,7 @@
 
 using System.Collections.Immutable;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
 namespace Content.Shared.EntityList
 {
@@ -19,14 +20,14 @@ namespace Content.Shared.EntityList
         [IdDataField]
         public string ID { get; private set; } = default!;
 
-        [DataField]
-        public ImmutableList<EntProtoId> Entities { get; private set; } = ImmutableList<EntProtoId>.Empty;
+        [DataField("entities", customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
+        public ImmutableList<string> EntityIds { get; private set; } = ImmutableList<string>.Empty;
 
-        public IEnumerable<EntityPrototype> GetEntities(IPrototypeManager? prototypeManager = null)
+        public IEnumerable<EntityPrototype> Entities(IPrototypeManager? prototypeManager = null)
         {
             prototypeManager ??= IoCManager.Resolve<IPrototypeManager>();
 
-            foreach (var entityId in Entities)
+            foreach (var entityId in EntityIds)
             {
                 yield return prototypeManager.Index<EntityPrototype>(entityId);
             }

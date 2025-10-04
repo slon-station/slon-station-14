@@ -24,9 +24,10 @@
     rules: ghost-role-information-bingle-rules
     mindRoles:
     - MindRoleGhostRoleTeamAntagonist
-    raffle: null # no raffle for spammed role fuck you
+    raffle:
+      settings: default
   - type: GhostRoleMobSpawner
-    prototype: MobBingleRandom
+    prototype: MobBingle
   - type: Sprite
     sprite: Markers/jobs.rsi
     layers:

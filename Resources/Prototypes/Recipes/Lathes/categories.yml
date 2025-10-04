@@ -113,10 +113,6 @@
   id: Wood
   name: lathe-category-wood
 
-- type: latheCategory
-  id: Marble
-  name: lathe-category-marble
-
 # Science
 - type: latheCategory
   id: Mech

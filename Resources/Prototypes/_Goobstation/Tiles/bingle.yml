@@ -21,7 +21,7 @@
   footstepSounds:
     collection: FootstepBlood
   itemDrop: FloorTileItemBingle
-  friction: 1 #No longer slippy
+  friction: 0.05 #slippy
   heatCapacity: 10000
   tileRipResistance: 80
 

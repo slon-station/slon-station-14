@@ -353,9 +353,8 @@
     interactFailureString: petting-failure-firebot
     interactSuccessSound:
       path: /Audio/Ambience/Objects/periodic_beep.ogg
-  - type: Vocalizer
-  - type: DatasetVocalizer
-    dataset: FirebotAd
+  - type: Advertise
+    pack: FirebotAd
 
 - type: entity
   parent: MobSiliconBase
@@ -584,9 +583,6 @@
     - Biological
   - type: Advertise
     pack: MedibotAds
-  - type: Vocalizer
-  - type: DatasetVocalizer
-    dataset: MedibotAds
   - type: Inventory
     templateId: medibot
   - type: DoAfter

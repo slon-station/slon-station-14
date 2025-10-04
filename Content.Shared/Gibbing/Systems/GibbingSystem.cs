@@ -203,8 +203,8 @@ public sealed class GibbingSystem : EntitySystem
             _audioSystem.PlayPredicted(gibbable.Comp.GibSound, outerEntity, null);
         }
 
-        if (gibType == GibType.Gib)
-            PredictedQueueDel(gibbable.Owner);
+        if (gibType == GibType.Gib && _net.IsServer) // Goob edit
+            QueueDel(gibbable);
         return true;
     }
 
@@ -308,8 +308,8 @@ public sealed class GibbingSystem : EntitySystem
 
         var gibbedEvent = new EntityGibbedEvent(gibbable, localGibs);
         RaiseLocalEvent(gibbable, ref gibbedEvent);
-        if (deleteTarget)
-            PredictedQueueDel(gibbable.Owner);
+        if (deleteTarget && _net.IsServer) // Goob edit
+            QueueDel(gibbable);
         return localGibs;
     }
 

@@ -44,7 +44,6 @@ using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Standing;
 using Content.Shared.Throwing;
-using Content.Shared.Popups;
 
 namespace Content.Goobstation.Shared.Traits.Assorted;
 
@@ -53,7 +52,6 @@ public sealed class LegsParalyzedSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifierSystem = default!;
     [Dependency] private readonly StandingStateSystem _standingSystem = default!;
     [Dependency] private readonly SharedBodySystem _bodySystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
 
     public override void Initialize()
     {
@@ -62,13 +60,12 @@ public sealed class LegsParalyzedSystem : EntitySystem
         SubscribeLocalEvent<LegsParalyzedComponent, BuckledEvent>(OnBuckled);
         SubscribeLocalEvent<LegsParalyzedComponent, UnbuckledEvent>(OnUnbuckled);
         SubscribeLocalEvent<LegsParalyzedComponent, ThrowPushbackAttemptEvent>(OnThrowPushbackAttempt);
-        SubscribeLocalEvent<LegsParalyzedComponent, StandAttemptEvent>(OnStandTry);
-        SubscribeLocalEvent<LegsParalyzedComponent, DownedEvent>(OnDowned);
+        SubscribeLocalEvent<LegsParalyzedComponent, UpdateCanMoveEvent>(OnUpdateCanMoveEvent);
     }
 
     private void OnStartup(EntityUid uid, LegsParalyzedComponent component, ComponentStartup args)
     {
-        // Completely paralyzed: cannot walk or run.
+        // TODO: In future probably must be surgery related wound
         _movementSpeedModifierSystem.ChangeBaseSpeed(uid, 0, 0, 20);
     }
 
@@ -81,11 +78,6 @@ public sealed class LegsParalyzedSystem : EntitySystem
     private void OnBuckled(EntityUid uid, LegsParalyzedComponent component, ref BuckledEvent args)
     {
         _standingSystem.Stand(uid);
-        _movementSpeedModifierSystem.ChangeBaseSpeed(
-            uid,
-            component.CrawlMoveSpeed,
-            component.CrawlMoveSpeed,
-            component.CrawlMoveAcceleration);
     }
 
     private void OnUnbuckled(EntityUid uid, LegsParalyzedComponent component, ref UnbuckledEvent args)
@@ -93,20 +85,9 @@ public sealed class LegsParalyzedSystem : EntitySystem
         _standingSystem.Down(uid);
     }
 
-    private void OnDowned(EntityUid uid, LegsParalyzedComponent component, DownedEvent args)
-    {
-        _movementSpeedModifierSystem.ChangeBaseSpeed(
-            uid,
-            component.CrawlMoveSpeed,
-            component.CrawlMoveSpeed,
-            component.CrawlMoveAcceleration);
-    }
-
-    private void OnStandTry(EntityUid uid, LegsParalyzedComponent component, StandAttemptEvent args)
+    private void OnUpdateCanMoveEvent(EntityUid uid, LegsParalyzedComponent component, UpdateCanMoveEvent args)
     {
         args.Cancel();
-        _popupSystem.PopupClient(Loc.GetString("paralyzed-no-stand"), uid, uid, PopupType.Medium);
-        _standingSystem.Down(uid);
     }
 
     private void OnThrowPushbackAttempt(EntityUid uid, LegsParalyzedComponent component, ThrowPushbackAttemptEvent args)

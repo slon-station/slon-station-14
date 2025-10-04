@@ -7,6 +7,7 @@
 // SPDX-License-Identifier: MIT
 
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 
 namespace Content.Server.Implants.Components;
 
@@ -19,6 +20,6 @@ public sealed partial class AutoImplantComponent : Component
     /// <summary>
     /// List of implants to inject.
     /// </summary>
-    [DataField(required: true)]
-    public List<EntProtoId> Implants = new();
+    [DataField(required: true, customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
+    public List<string> Implants = [];
 }

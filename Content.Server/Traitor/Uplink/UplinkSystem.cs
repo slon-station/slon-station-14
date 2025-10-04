@@ -58,9 +58,10 @@ public sealed class UplinkSystem : EntitySystem
     [Dependency] private readonly SharedSubdermalImplantSystem _subdermalImplant = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
 
-    public static readonly ProtoId<CurrencyPrototype> TelecrystalCurrencyPrototype = "Telecrystal";
-    private static readonly EntProtoId FallbackUplinkImplant = "UplinkImplant";
-    private static readonly ProtoId<ListingPrototype> FallbackUplinkCatalog = "UplinkUplinkImplanter";
+    [ValidatePrototypeId<CurrencyPrototype>]
+    public const string TelecrystalCurrencyPrototype = "Telecrystal";
+    private const string FallbackUplinkImplant = "UplinkImplant";
+    private const string FallbackUplinkCatalog = "UplinkUplinkImplanter";
 
     /// <summary>
     /// Adds an uplink to the target
@@ -110,6 +111,8 @@ public sealed class UplinkSystem : EntitySystem
     /// </summary>
     private bool ImplantUplink(EntityUid user, FixedPoint2 balance)
     {
+        var implantProto = new string(FallbackUplinkImplant);
+
         if (!_proto.TryIndex<ListingPrototype>(FallbackUplinkCatalog, out var catalog))
             return false;
 
@@ -121,7 +124,7 @@ public sealed class UplinkSystem : EntitySystem
         else
             balance = balance - cost;
 
-        var implant = _subdermalImplant.AddImplant(user, FallbackUplinkImplant);
+        var implant = _subdermalImplant.AddImplant(user, implantProto);
 
         if (!HasComp<StoreComponent>(implant))
             return false;

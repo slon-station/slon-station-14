@@ -100,11 +100,13 @@
 // SPDX-FileCopyrightText: 2024 github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2024 lunarcomets <140772713+lunarcomets@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2024 lzk <124214523+lzk228@users.noreply.github.com>
+// SPDX-FileCopyrightText: 2024 metalgearsloth <31366439+metalgearsloth@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2024 metalgearsloth <comedian_vs_clown@hotmail.com>
 // SPDX-FileCopyrightText: 2024 nikthechampiongr <32041239+nikthechampiongr@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2024 plykiya <plykiya@protonmail.com>
 // SPDX-FileCopyrightText: 2024 saintmuntzer <47153094+saintmuntzer@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2024 shamp <140359015+shampunj@users.noreply.github.com>
+// SPDX-FileCopyrightText: 2024 slarticodefast <161409025+slarticodefast@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2024 stellar-novas <stellar_novas@riseup.net>
 // SPDX-FileCopyrightText: 2024 strO0pwafel <153459934+strO0pwafel@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2024 stroopwafel <j.o.luijkx@student.tudelft.nl>
@@ -112,12 +114,7 @@
 // SPDX-FileCopyrightText: 2024 to4no_fix <156101927+chavonadelal@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2024 voidnull000 <18663194+voidnull000@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2025 Aiden <28298836+Aidenkrz@users.noreply.github.com>
-// SPDX-FileCopyrightText: 2025 GoobBot <uristmchands@proton.me>
 // SPDX-FileCopyrightText: 2025 Leon Friedrich <60421075+ElectroJr@users.noreply.github.com>
-// SPDX-FileCopyrightText: 2025 SX-7 <sn1.test.preria.2002@gmail.com>
-// SPDX-FileCopyrightText: 2025 SolsticeOfTheWinter <solsticeofthewinter@gmail.com>
-// SPDX-FileCopyrightText: 2025 metalgearsloth <31366439+metalgearsloth@users.noreply.github.com>
-// SPDX-FileCopyrightText: 2025 slarticodefast <161409025+slarticodefast@users.noreply.github.com>
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -199,7 +196,7 @@ namespace Content.Server.Light.EntitySystems
             // TODO: Use ContainerFill dog
             if (light.HasLampOnSpawn != null)
             {
-                var entity = Spawn(light.HasLampOnSpawn, Comp<TransformComponent>(uid).Coordinates);
+                var entity = EntityManager.SpawnEntity(light.HasLampOnSpawn, EntityManager.GetComponent<TransformComponent>(uid).Coordinates);
                 _containerSystem.Insert(entity, light.LightBulbContainer);
             }
             // need this to update visualizers
@@ -257,7 +254,7 @@ namespace Content.Server.Light.EntitySystems
                 return false;
 
             // check if bulb fits
-            if (!TryComp(bulbUid, out LightBulbComponent? lightBulb))
+            if (!EntityManager.TryGetComponent(bulbUid, out LightBulbComponent? lightBulb))
                 return false;
             if (lightBulb.Type != light.BulbType)
                 return false;
@@ -313,9 +310,9 @@ namespace Content.Server.Light.EntitySystems
         ///     Try to replace current bulb with a new one
         ///     If succeed old bulb just drops on floor
         /// </summary>
-        public bool ReplaceBulb(EntityUid uid, EntityUid bulb, out EntityUid? oldBulb, PoweredLightComponent? light = null) // Goobstation
+        public bool ReplaceBulb(EntityUid uid, EntityUid bulb, PoweredLightComponent? light = null)
         {
-            oldBulb = EjectBulb(uid, null, light); // Goobstation
+            EjectBulb(uid, null, light);
             return InsertBulb(uid, bulb, light);
         }
 
@@ -349,7 +346,7 @@ namespace Content.Server.Light.EntitySystems
 
             // check bulb state
             var bulbUid = GetBulb(uid, light);
-            if (bulbUid == null || !TryComp(bulbUid.Value, out LightBulbComponent? lightBulb))
+            if (bulbUid == null || !EntityManager.TryGetComponent(bulbUid.Value, out LightBulbComponent? lightBulb))
                 return false;
             if (lightBulb.State == LightBulbState.Broken)
                 return false;
@@ -375,7 +372,7 @@ namespace Content.Server.Light.EntitySystems
 
             // check if light has bulb
             var bulbUid = GetBulb(uid, light);
-            if (bulbUid == null || !TryComp(bulbUid.Value, out LightBulbComponent? lightBulb))
+            if (bulbUid == null || !EntityManager.TryGetComponent(bulbUid.Value, out LightBulbComponent? lightBulb))
             {
                 SetLight(uid, false, light: light);
                 powerReceiver.Load = 0;
@@ -471,7 +468,7 @@ namespace Content.Server.Light.EntitySystems
 
             light.IsBlinking = isNowBlinking;
 
-            if (!TryComp(uid, out AppearanceComponent? appearance))
+            if (!EntityManager.TryGetComponent(uid, out AppearanceComponent? appearance))
                 return;
 
             _appearance.SetData(uid, PoweredLightVisuals.Blinking, isNowBlinking, appearance);
@@ -507,7 +504,7 @@ namespace Content.Server.Light.EntitySystems
             light.CurrentLit = value;
             _ambientSystem.SetAmbience(uid, value);
 
-            if (TryComp(uid, out PointLightComponent? pointLight))
+            if (EntityManager.TryGetComponent(uid, out PointLightComponent? pointLight))
             {
                 _pointLight.SetEnabled(uid, value, pointLight);
 

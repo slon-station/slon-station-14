@@ -6,37 +6,34 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-using Content.Shared.NameModifier.Components;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 
-namespace Content.Goobstation.Shared.Nutrition.EntitySystems;
-
-public class FoodSequenceSpriteSystem : SharedFoodSequenceSystem
+namespace Content.Goobstation.Shared.Nutrition.EntitySystems
 {
-    private EntityQuery<NameModifierComponent> _modifierQuery;
-
-    public override void Initialize()
+    public class FoodSequenceSpriteSystem : SharedFoodSequenceSystem
     {
-        base.Initialize();
+        public override void Initialize()
+        {
+            base.Initialize();
+            SubscribeLocalEvent<FoodSequenceElementComponent, ComponentStartup>(OnComponentStartup);
+        }
 
-        _modifierQuery = GetEntityQuery<NameModifierComponent>();
+        private void OnComponentStartup(Entity<FoodSequenceElementComponent> ent, ref ComponentStartup args)
+        {
+            if (ent.Comp.Entries.Count == 0)
+            {
+                var defaultEntry = new FoodSequenceElementEntry();
 
-        SubscribeLocalEvent<FoodSequenceElementComponent, ComponentStartup>(OnComponentStartup);
-    }
+                if (TryComp<MetaDataComponent>(ent, out var meta))
+                {
+                    defaultEntry.Name = meta.EntityName.Replace(" ", string.Empty);
+                    defaultEntry.Proto = meta.EntityPrototype?.ID;
+                }
 
-    private void OnComponentStartup(Entity<FoodSequenceElementComponent> ent, ref ComponentStartup args)
-    {
-        if (ent.Comp.Entries.Count != 0)
-            return;
+                ent.Comp.Entries.Add("default", defaultEntry);
+            }
+        }
 
-        var defaultEntry = new FoodSequenceElementEntry();
-
-        var meta = MetaData(ent);
-        var name = _modifierQuery.CompOrNull(ent)?.BaseName ?? meta.EntityName;
-        defaultEntry.Name = name.Replace(" ", string.Empty);
-        defaultEntry.Proto = meta.EntityPrototype?.ID;
-
-        ent.Comp.Entries.Add("default", defaultEntry);
     }
 }

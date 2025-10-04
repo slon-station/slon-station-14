@@ -450,9 +450,9 @@ public sealed class VoiceChatServerManager : IVoiceChatServerManager, IPostInjec
     }
 
     /// <summary>
-    /// Shutdown the voice chat server manager.
+    /// Dispose the voice chat server manager.
     /// </summary>
-    public void Shutdown()
+    public void Dispose()
     {
         _cfg.UnsubValueChanged(GoobCVars.VoiceChatEnabled, OnVoiceChatEnabledChanged);
         _cfg.UnsubValueChanged(GoobCVars.VoiceChatPort, OnVoiceChatPortChanged);
@@ -460,7 +460,7 @@ public sealed class VoiceChatServerManager : IVoiceChatServerManager, IPostInjec
 
         StopServer();
 
-        _sawmill.Info("VoiceChatServerManager has been shut down");
+        _sawmill.Info("VoiceChatServerManager disposed");
     }
 
     /// <summary>

@@ -141,7 +141,8 @@ public sealed class VoiceChatClientManager : IVoiceChatManager
         _activeStreams[sourceEntity] = streamManager;
     }
 
-    public void Shutdown()
+    /// <inheritdoc/>
+    public void Dispose()
     {
         _cfg.UnsubValueChanged(GoobCVars.VoiceChatVolume, OnVolumeChanged);
         _cfg.UnsubValueChanged(GoobCVars.VoiceChatHearSelf, OnHearSelfChanged);
@@ -152,7 +153,7 @@ public sealed class VoiceChatClientManager : IVoiceChatManager
         }
         _activeStreams.Clear();
 
-        _sawmill.Info("VoiceChatClientManager has been shut down");
+        _sawmill.Info("VoiceChatClientManager disposed");
     }
 
     /// <inheritdoc/>

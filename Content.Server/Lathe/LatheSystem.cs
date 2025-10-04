@@ -108,7 +108,6 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Server.Chat.Systems;
-using Content.Goobstation.Common.NTR.Scan; // Goobstation
 using Content.Shared.Chat;
 
 namespace Content.Server.Lathe
@@ -260,7 +259,7 @@ namespace Content.Server.Lathe
 
                 _materialStorage.TryChangeMaterialAmount(uid, mat, adjustedAmount);
             }
-            component.Queue.Enqueue(recipe);
+            component.Queue.Add(recipe);
 
             return true;
         }
@@ -272,8 +271,8 @@ namespace Content.Server.Lathe
             if (component.CurrentRecipe != null || component.Queue.Count <= 0 || !this.IsPowered(uid, EntityManager))
                 return false;
 
-            var recipeProto = component.Queue.Dequeue();
-            var recipe = _proto.Index(recipeProto);
+            var recipe = component.Queue.First();
+            component.Queue.RemoveAt(0);
 
             var time = _reagentSpeed.ApplySpeed(uid, recipe.CompleteTime) * component.TimeMultiplier;
 
@@ -303,16 +302,13 @@ namespace Content.Server.Lathe
 
             if (comp.CurrentRecipe != null)
             {
-                var currentRecipe = _proto.Index(comp.CurrentRecipe.Value);
-                if (currentRecipe.Result is { } resultProto)
+                if (comp.CurrentRecipe.Result is { } resultProto)
                 {
                     var result = Spawn(resultProto, Transform(uid).Coordinates);
                     _stack.TryMergeToContacts(result);
-                    if (TryComp<ScannableForPointsComponent>(result, out var scannable)) // Goobstation
-                        scannable.Points = 0; // Goobstation, this thing is to prevent ntr duping points via an emagged lathe
                 }
 
-                if (currentRecipe.ResultReagents is { } resultReagents &&
+                if (comp.CurrentRecipe.ResultReagents is { } resultReagents &&
                     comp.ReagentOutputSlotId is { } slotId)
                 {
                     var toAdd = new Solution(
@@ -350,11 +346,9 @@ namespace Content.Server.Lathe
             if (!Resolve(uid, ref component))
                 return;
 
-            var producing = component.CurrentRecipe;
-            if (producing == null && component.Queue.TryPeek(out var next))
-                producing = next;
+            var producing = component.CurrentRecipe ?? component.Queue.FirstOrDefault();
 
-            var state = new LatheUpdateState(GetAvailableRecipes(uid, component), component.Queue.ToArray(), producing);
+            var state = new LatheUpdateState(GetAvailableRecipes(uid, component), component.Queue, producing);
             _uiSys.SetUiState(uid, LatheUiKey.Key, state);
         }
 
@@ -468,12 +462,12 @@ namespace Content.Server.Lathe
         {
             if (component.Queue.Count > 0)
             {
-                var allMaterials = component.Queue.SelectMany(q => _proto.Index(q).Materials);
+                var allMaterials = component.Queue.SelectMany(q => q.Materials);
                 var totalMaterials = new Dictionary<string, int>();
 
                 foreach (var (mat, amount) in allMaterials)
                 {
-                    if(!totalMaterials.ContainsKey(mat))
+                    if(!totalMaterials.ContainsKey(mat)) 
                         totalMaterials[mat] = 0;
                     totalMaterials[mat] += amount;
                 }

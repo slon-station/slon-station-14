@@ -58,7 +58,6 @@
     - NailgunStatic
     - NailsStatic
     dynamicPacks:
-    - ConstructionBagOfHolding
     - AdvancedTools
     - AtmosTools
     - EngineeringWeapons
@@ -70,7 +69,6 @@
     - SharedBoards
     - CameraBoards
     - ShuttleBoards
-    - ShuttleBoardsGoob
     - BluespaceTheory
     - ScienceClothing
     - UpgradeKits
@@ -135,10 +133,8 @@
     - CargoBoards
     - SharedBoards
     - ShuttleBoards
-    - ShuttleBoardsGoob
     - BluespaceTheory
     - ScienceClothing
-    - ConstructionBagOfHolding
   - type: EmagLatheRecipes
     emagStaticPacks:
     - SalvageExplosivesStatic # Seismic charges - they're pretty cheap in salvage vendor anyway so why not
@@ -213,13 +209,11 @@
     - SharedBoards
     - ScienceBoards
     - ShuttleBoards
-    - ShuttleBoardsGoob
     - MedicalBoardsGoob
     - BluespaceTheory
     - ExperimentalScienceGoob
     - MechBoardsScience
     - Pinpointers
-    - Genetics
     # Einstein Engines Packs
     - Translators
     - TranslatorImplanters

@@ -102,10 +102,8 @@ public abstract class SharedPinpointerSystem : EntitySystem
 
         if (pinpointer.UpdateTargetName)
             pinpointer.TargetName = Identity.Name(target.Value, EntityManager);
-        // WD EDIT START - UpdateDirectionToTarget is triggered when updating, no need to run it again
-        // if (pinpointer.IsActive)
-        //    UpdateDirectionToTarget(uid, pinpointer);
-        // WD EDIT END
+        if (pinpointer.IsActive)
+            UpdateDirectionToTarget(uid, pinpointer);
     }
 
     /// <summary>
@@ -125,10 +123,8 @@ public abstract class SharedPinpointerSystem : EntitySystem
 
         pinpointer.Targets = targetsList;
 
-        // WD EDIT START - UpdateDirectionToTarget is triggered when updating, no need to run it again
-        // if (pinpointer.IsActive)
-        //    UpdateDirectionToTarget(uid, pinpointer);
-        // WD EDIT END
+        if (pinpointer.IsActive)
+            UpdateDirectionToTarget(uid, pinpointer);
     }
 
     /// <summary>
@@ -141,7 +137,7 @@ public abstract class SharedPinpointerSystem : EntitySystem
 
     private void OnExamined(EntityUid uid, PinpointerComponent component, ExaminedEvent args)
     {
-        if (!component.CanExamine || !args.IsInDetailsRange || component.TargetName == null) // WD EDIT
+        if (!args.IsInDetailsRange || component.TargetName == null)
             return;
 
         args.PushMarkup(Loc.GetString("examine-pinpointer-linked", ("target", component.TargetName)));
@@ -212,11 +208,6 @@ public abstract class SharedPinpointerSystem : EntitySystem
 
     private void OnEmagged(EntityUid uid, PinpointerComponent component, ref GotEmaggedEvent args)
     {
-        // WD EDIT START
-        if (!component.CanEmag)
-            return;
-        // WD EDIT END
-
         if (!_emag.CompareFlag(args.Type, EmagType.Interaction))
             return;
 

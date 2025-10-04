@@ -215,7 +215,7 @@
     actions:
     - ActionSummonStickmen
   - type: ItemActionGrant
-    activeIfWorn: true
+    restrictSlots: true
     restrictedSlots:
     - OUTERCLOTHING
     actions:

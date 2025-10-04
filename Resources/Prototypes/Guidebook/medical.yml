@@ -23,7 +23,7 @@
   name: guide-entry-medical
   text: "/ServerInfo/Guidebook/Medical/Medical.xml"
   children:
-  - MedicalDoctor
+  - Medical Doctor
   - Chemist
   - Cloning
   - Cryogenics
@@ -31,7 +31,7 @@
   - Medical Patches # Fix for Medicine Patches
 
 - type: guideEntry
-  id: MedicalDoctor
+  id: Medical Doctor
   name: guide-entry-medicaldoctor
   text: "/ServerInfo/Guidebook/Medical/MedicalDoctor.xml"
 

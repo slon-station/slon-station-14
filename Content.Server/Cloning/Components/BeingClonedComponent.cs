@@ -19,11 +19,5 @@ namespace Content.Server.Cloning.Components
 
         [ViewVariables]
         public EntityUid Parent;
-
-        /// <summary>
-        /// Goobstation - The previous body that this is a clone of.
-        /// </summary>
-        [DataField]
-        public EntityUid? Original;
     }
 }

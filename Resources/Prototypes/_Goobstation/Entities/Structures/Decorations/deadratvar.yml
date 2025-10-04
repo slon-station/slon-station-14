@@ -10,11 +10,11 @@
   description: The corpse of an ancient construct made of brass and cogs. It still hums with tremendous power.
   components:
   - type: Sprite
-    layers:
-    - sprite: /Textures/_Goobstation/Structures/Decoration/deadratvar.rsi
-      state: dead_ratvar
-      noRot: true
-      drawdepth: OverMobs
+    noRot: true
+    sprite: /Textures/_Goobstation/Structures/Decoration/deadratvar.rsi
+    state: dead_ratvar
+    drawdepth: OverMobs
+    size: Ginormous
   - type: AmbientSound
     volume: 2
     range: 20

@@ -138,7 +138,6 @@
 # SPDX-FileCopyrightText: 2025 ScarKy0 <106310278+ScarKy0@users.noreply.github.com>
 # SPDX-FileCopyrightText: 2025 SlamBamActionman <83650252+SlamBamActionman@users.noreply.github.com>
 # SPDX-FileCopyrightText: 2025 Solstice <solsticeofthewinter@gmail.com>
-# SPDX-FileCopyrightText: 2025 SolsticeOfTheWinter <solsticeofthewinter@gmail.com>
 # SPDX-FileCopyrightText: 2025 Ted Lukin <66275205+pheenty@users.noreply.github.com>
 # SPDX-FileCopyrightText: 2025 august-sun <45527070+august.sun@users.noreply.github.com>
 # SPDX-FileCopyrightText: 2025 coderabbitai[bot] <136622811+coderabbitai[bot]@users.noreply.github.com>
@@ -161,9 +160,7 @@
     sprite: Clothing/Belt/utility.rsi
   - type: Storage
     maxItemSize: Normal
-    # Don't add more than absolutely needed to this whitelist!
-    # Utility belts shouldn't just be free extra storage.
-    # This is only intended for basic engineering equipment.
+    # TODO: Fill this out more.
     whitelist:
       tags:
         - Powerdrill
@@ -183,14 +180,12 @@
         - JawsOfLife
         - GPS
         - WeldingMask
-        - RemoteSignaller
         - Hammer # Goobstation
         - Nailgun # Goobstation
         - MagazineNailgun # Goobstation
       components:
         - StationMap
         - SprayPainter
-        - SprayPainterAmmo
         - NetworkConfigurator
         - RCD
         - RCDAmmo
@@ -278,7 +273,6 @@
       components:
         - StationMap
         - SprayPainter
-        - SprayPainterAmmo
         - NetworkConfigurator
         - RCD
         - RCDAmmo
@@ -394,8 +388,6 @@
         - WetFloorSign
         - HolosignProjector
         - Plunger
-        - Keyring # Goobstation
-        - WireBrush
       components:
         - LightReplacer
         - SmokeOnTrigger
@@ -414,10 +406,6 @@
         whitelist:
           tags:
           - Wrench
-      keyring: # Goobstation
-        whitelist:
-          tags:
-          - Keyring
     sprite: Clothing/Belt/belt_overlay.rsi
   - type: Appearance
 

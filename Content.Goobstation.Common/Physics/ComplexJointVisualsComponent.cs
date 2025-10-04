@@ -22,22 +22,18 @@ public sealed partial class ComplexJointVisualsComponent : Component
 
 [Serializable, NetSerializable, DataDefinition]
 public sealed partial class ComplexJointVisualsData(
-    string id,
     SpriteSpecifier sprite,
     Color color)
 {
-    public ComplexJointVisualsData() : this(string.Empty, SpriteSpecifier.Invalid, Color.White) { }
+    public ComplexJointVisualsData() : this(SpriteSpecifier.Invalid, Color.White) { }
 
-    public ComplexJointVisualsData(string id, SpriteSpecifier sprite) : this(id, sprite, Color.White) { }
+    public ComplexJointVisualsData(SpriteSpecifier sprite) : this(sprite, Color.White) { }
 
     [DataField]
     public SpriteSpecifier Sprite = sprite;
 
     [DataField]
     public Color Color = color;
-
-    [DataField]
-    public string Id = id;
 
     // TODO: add support for joint offsets
 }

@@ -42,6 +42,7 @@
   markers:
   - RandomTendrilLavaland
   - RandomMobLavaland
+  - ChasmLavaland
   - OreIron
   - OreCoal
   - OreQuartz

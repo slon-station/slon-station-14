@@ -343,7 +343,16 @@
   parent: BaseAntagSpawner
   components:
   - type: GhostRoleMobSpawner
-    prototype: AncientRogueKingToken
+    prototype: CMMobXenoRogueKingSentient
+  - type: GhostRole
+    makeSentient: true
+    name: ghost-role-information-ancient-rogue-king-name
+    description: ghost-role-information-ancient-rogue-king-description
+    rules: ghost-role-information-ancient-rogue-king-rules
+    mindRoles:
+    - MindRoleGhostRoleSoloAntagonist
+    raffle:
+      settings: default
   - type: Sprite
     sprite: Markers/jobs.rsi
     layers:

@@ -103,9 +103,7 @@
   description: This implant allows the user to perform various Krav Maga moves.
   categories: [ HideSpawnMenu ]
   components:
-  - type: ComponentsImplant
-    added:
-    - type: KravMaga
+  - type: KravMagaImplant
 
 - type: entity
   parent: BaseSubdermalImplant
@@ -137,11 +135,7 @@
   description: This implant allows the user to survive in space and without air.
   categories: [ HideSpawnMenu ]
   components:
-  - type: ComponentsImplant
-    added:
-    - type: BreathingImmunity
-    - type: PressureImmunity
-    - type: SpecialLowTempImmunity
+  - type: SpaceProofImplant
 
 - type: entity
   parent: BaseSubdermalImplant
@@ -161,29 +155,6 @@
   components:
   - type: ImplantGrantCollectiveMind
     collectiveMind: Binary
-
-- type: entity
-  parent: BaseSubdermalImplant
-  id: ClumsyImplant
-  name: clumsy implant
-  description: This implant makes the user clumsy, allowing them to drive a certain vehicle.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: ComponentsImplant
-    added:
-    - type: Clumsy
-
-- type: entity
-  parent: BaseSubdermalImplant
-  id: ShadowmindImplant
-  name: shadowmind implant
-  description: This implant allows the user to access Shadowmind channel (use +q).
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: SubdermalImplant
-    permanent: true
-  - type: ImplantGrantCollectiveMind
-    collectiveMind: Shadowmind
 
 # Admeme
 
@@ -242,62 +213,26 @@
 - type: entity
   parent: BaseSubdermalImplant
   id: AntagImplantChangeling
-  name: changeling implant
+  name: antag implant
   description: This implant allows the user to shift their bodies like a changeling
   categories: [ HideSpawnMenu ]
   components:
-  - type: ComponentsImplant
-    added:
-    - type: Changeling
-    - type: ChangelingIdentity
-    - type: Store
-    # this shit is broken still CBF to fix it but you need to make it find or add a ling rule, then MakeChangeling it
-    removed:
-    - type: Hunger
-    - type: Thirst
+  - type: ChangelingImplant
 
 - type: entity
   parent: BaseSubdermalImplant
   id: AntagImplantHeretic
-  name: heretic implant
+  name: antag implant
   description: This implant allows the user to connect to the powers of the mansus.
   categories: [ HideSpawnMenu ]
   components:
-  - type: ComponentsImplant
-    added:
-    - type: Heretic
-    - type: Store
-      currencyWhitelist:
-      - KnowledgePoint
-      balance:
-        KnowledgePoint: 2
+  - type: HereticImplant
 
 - type: entity
   parent: BaseSubdermalImplant
   id: AntagImplantSpaceNinja
-  name: ninja implant
+  name: antag implant
   description: This implant allows the user to gain the skills of a space ninja.
   categories: [ HideSpawnMenu ]
   components:
-  - type: ComponentsImplant
-    added:
-    - type: SpaceNinja
-
-- type: entity
-  parent: BaseSubdermalImplant
-  id: XenoCompatibilityImplant
-  name: xeno compatibility implant
-  description: Allows a subject to have xeno organs transplanted.
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: SubdermalImplant
-    permanent: true
-    whitelist:
-      requireAll: true
-      components: # should cover all the bases (no IPCs)
-      - Body
-      - Bloodstream
-      - Dna
-  - type: ComponentsImplant
-    added:
-    - type: XenoCompatible
+  - type: SpaceNinjaImplant

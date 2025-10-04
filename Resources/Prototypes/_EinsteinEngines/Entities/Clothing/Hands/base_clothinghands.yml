@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: ClothingHandsButcherable
+  parent: ClothingHandsGlovesSyntheticBase
   id: ClothingHandsGlovesEnviroglovesBase
   components:
   - type: Armor

@@ -37,7 +37,6 @@
   - type: Tag
     tags:
     - Payload
-    - RemoteSignaller
   - type: DeviceNetwork
     deviceNetId: Wireless
     receiveFrequencyId: BasicDevice

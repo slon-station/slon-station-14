@@ -8,9 +8,3 @@
   values:
     prefix: issuers-corporate-flavor-
     count: 2
-
-- type: localizedDataset
-  id: TraitorCorporationsFlavor
-  values:
-    prefix: traitor-corporations-flavor-dataset-
-    count: 12

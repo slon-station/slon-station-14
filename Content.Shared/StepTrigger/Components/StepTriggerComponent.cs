@@ -93,13 +93,3 @@ public sealed partial class StepTriggerActiveComponent : Component
 {
 
 }
-
-/// Goobstation - Fix
-/// <summary>
-/// This component is used to track entities for cleanup.
-/// </summary>
-[RegisterComponent]
-public sealed partial class StepTriggerCleanupComponent : Component
-{
-    public EntityUid StepTrigger;
-}

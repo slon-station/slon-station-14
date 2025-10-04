@@ -148,7 +148,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      80: Dead
+      100: Dead
   - type: Stamina
     critThreshold: 150
   - type: MovementAlwaysTouching
@@ -306,10 +306,6 @@
   - type: Fauna # Lavaland Change
   - type: CombatPower # Goobstation
     factor: 1 # times more dangerous than a crew-member
-  - type: MobThresholds
-    thresholds:
-      0: Alive
-      120: Dead # Lavaland Change: 60 -> 120
 
 - type: entity
   id: MobKangarooSpaceSalvage
@@ -344,7 +340,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      45: Dead
+      90: Dead
   - type: Stamina
     critThreshold: 150
   - type: DamageStateVisuals
@@ -458,7 +454,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      70: Dead # Lavaland Change: 40 -> 70
+      100: Dead
   - type: Stamina
     critThreshold: 150
   - type: DamageStateVisuals

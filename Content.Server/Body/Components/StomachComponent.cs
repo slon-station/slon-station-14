@@ -15,7 +15,6 @@
 
 using Content.Server.Body.Systems;
 using Content.Server.Nutrition.EntitySystems;
-using Content.Shared.Body.Components;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Whitelist;
@@ -37,18 +36,6 @@ namespace Content.Server.Body.Components
         /// </summary>
         [DataField]
         public TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
-
-        /// <summary>
-        /// Multiplier applied to <see cref="UpdateInterval"/> for adjusting based on metabolic rate multiplier.
-        /// </summary>
-        [DataField]
-        public float UpdateIntervalMultiplier = 1f;
-
-        /// <summary>
-        /// Adjusted update interval based off of the multiplier value.
-        /// </summary>
-        [ViewVariables]
-        public TimeSpan AdjustedUpdateInterval => UpdateInterval * UpdateIntervalMultiplier;
 
         /// <summary>
         ///     The solution inside of this stomach this transfers reagents to the body.

@@ -18,9 +18,6 @@ using Content.Shared.Chat;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Verbs;
-using Content.Shared.Audio.Jukebox;
-using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 
 namespace Content.Goobstation.Server.Vehicles.Clowncar;
@@ -32,11 +29,9 @@ public sealed class ClowncarSystem : SharedClowncarSystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedBuckleSystem _buckle = default!;
-    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
+
 
     /// <inheritdoc/>
-
     public override void Initialize()
     {
         base.Initialize();
@@ -46,7 +41,6 @@ public sealed class ClowncarSystem : SharedClowncarSystem
         SubscribeLocalEvent<ClowncarComponent, ClownCarOpenTrunkDoAfterEvent>(OnOpenTrunk);
         SubscribeLocalEvent<ClowncarComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<ClowncarComponent, QuietBackThereActionEvent>(OnQuietInTheBack);
-        SubscribeLocalEvent<JukeboxComponent, DrivingWithStyleActionEvent>(OnDrivingWithStyle);
     }
 
     private void OnThankRider(EntityUid uid, ClowncarComponent component, ThankRiderActionEvent args)
@@ -86,8 +80,7 @@ public sealed class ClowncarSystem : SharedClowncarSystem
         if (!TryComp<VehicleComponent>(uid, out var vehicle))
             return;
 
-        if (vehicle.Driver == null)
-        {
+        if (vehicle.Driver == null){
             AlternativeVerb verb = new();
             verb.Text = "Enter Driver seat";
             verb.Act = () => EnterDriverSeatVerb(uid, verbs.User, component);
@@ -175,12 +168,6 @@ public sealed class ClowncarSystem : SharedClowncarSystem
     {
         component.ThankCounter = 0;
         _chatSystem.TrySendInGameICMessage(args.Performer, Loc.GetString("clowncar-quiet-in-the-back"), InGameICChatType.Speak, false);
-        args.Handled = true;
     }
 
-    private void OnDrivingWithStyle(Entity<JukeboxComponent> clownCar, ref DrivingWithStyleActionEvent args)
-    {
-        _uiSystem.TryOpenUi(clownCar.Owner, JukeboxUiKey.Key, args.Performer);
-        args.Handled = true;
-    }
 }

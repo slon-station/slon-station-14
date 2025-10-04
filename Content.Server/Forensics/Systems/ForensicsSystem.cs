@@ -78,10 +78,8 @@
 // SPDX-FileCopyrightText: 2024 voidnull000 <18663194+voidnull000@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2025 Aiden <28298836+Aidenkrz@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2025 GoobBot <uristmchands@proton.me>
-// SPDX-FileCopyrightText: 2025 Hagvan <22118902+Hagvan@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2025 SX-7 <sn1.test.preria.2002@gmail.com>
 // SPDX-FileCopyrightText: 2025 ScarKy0 <106310278+ScarKy0@users.noreply.github.com>
-// SPDX-FileCopyrightText: 2025 Solstice <solsticeofthewinter@gmail.com>
 // SPDX-FileCopyrightText: 2025 SolsticeOfTheWinter <solsticeofthewinter@gmail.com>
 // SPDX-FileCopyrightText: 2025 Zachary Higgs <compgeek223@gmail.com>
 // SPDX-FileCopyrightText: 2025 godisdeadLOL <169250097+godisdeadLOL@users.noreply.github.com>
@@ -97,7 +95,6 @@ using Content.Server.DoAfter;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Forensics.Components;
 using Content.Server.Popups;
-using Content.Shared.Body.Events;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Chemistry.Components;
@@ -115,7 +112,6 @@ using Content.Shared.Verbs;
 using Robust.Shared.Utility;
 using Content.Shared.Hands.Components;
 using Content.Shared.Inventory.Events;
-using Robust.Shared.Timing; // Goobstation
 
 namespace Content.Server.Forensics
 {
@@ -126,7 +122,6 @@ namespace Content.Server.Forensics
         [Dependency] private readonly DoAfterSystem _doAfterSystem = default!;
         [Dependency] private readonly PopupSystem _popupSystem = default!;
         [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-        [Dependency] private readonly IGameTiming _timing = default!; // Goobstation
 
         public override void Initialize()
         {
@@ -153,7 +148,7 @@ namespace Content.Server.Forensics
             if (soln.Count > 0)
             {
                 var comp = EnsureComp<ForensicsComponent>(ent.Owner);
-                foreach (var dna in soln) // Goobstation
+                foreach (string dna in soln)
                 {
                     comp.DNAs.Add(dna);
                 }
@@ -209,7 +204,7 @@ namespace Content.Server.Forensics
             foreach (EntityUid part in args.GibbedParts)
             {
                 var partComp = EnsureComp<ForensicsComponent>(part);
-                partComp.DNAs.Add((dna, TimeSpan.Zero)); // Goobstation
+                partComp.DNAs.Add(dna);
                 partComp.CanDnaBeCleaned = false;
                 Dirty(part, partComp); // Einstein Engines
             }
@@ -224,13 +219,7 @@ namespace Content.Server.Forensics
                 foreach (EntityUid hitEntity in args.HitEntities)
                 {
                     if (TryComp<DnaComponent>(hitEntity, out var hitEntityComp) && hitEntityComp.DNA != null)
-                    { // Goobstation Start
-                        // remove old DNA if it exists because need to refresh the freshness timestamp
-                        // seems to be shitcode but why is it a hashset in the first place, it never gets large so why not just use a list?
-                        component.DNAs.RemoveWhere(x => x.Item1 == hitEntityComp.DNA);
-
-                        component.DNAs.Add((hitEntityComp.DNA, _timing.CurTime));
-                    } // Goobstation End
+                        component.DNAs.Add(hitEntityComp.DNA);
                 }
             }
             Dirty(uid, component); // Einstein Engines
@@ -270,9 +259,9 @@ namespace Content.Server.Forensics
             }
         }
 
-        public List<(string, TimeSpan)> GetSolutionsDNA(EntityUid uid) // Goobstation
+        public List<string> GetSolutionsDNA(EntityUid uid)
         {
-            List<(string, TimeSpan)> list = new(); // Goobstation
+            List<string> list = new();
             if (TryComp<SolutionContainerManagerComponent>(uid, out var comp))
             {
                 foreach (var (_, soln) in _solutionContainerSystem.EnumerateSolutions((uid, comp)))
@@ -283,16 +272,16 @@ namespace Content.Server.Forensics
             return list;
         }
 
-        public List<(string, TimeSpan)> GetSolutionsDNA(Solution soln) // Goobstation
+        public List<string> GetSolutionsDNA(Solution soln)
         {
-            List<(string, TimeSpan)> list = new(); // Goobstation
+            List<string> list = new();
             foreach (var reagent in soln.Contents)
             {
                 foreach (var data in reagent.Reagent.EnsureReagentData())
                 {
                     if (data is DnaData)
                     {
-                        list.Add((((DnaData) data).DNA, ((DnaData) data).Freshness)); // Goobstation
+                        list.Add(((DnaData) data).DNA);
                     }
                 }
             }
@@ -476,7 +465,7 @@ namespace Content.Server.Forensics
                 return;
 
             var recipientComp = EnsureComp<ForensicsComponent>(args.Recipient);
-            recipientComp.DNAs.Add((component.DNA, TimeSpan.Zero)); // Goobstation
+            recipientComp.DNAs.Add(component.DNA);
             recipientComp.CanDnaBeCleaned = args.CanDnaBeCleaned;
         }
 
@@ -522,7 +511,7 @@ namespace Content.Server.Forensics
             if (TryComp<DnaComponent>(donor, out var donorComp) && donorComp.DNA != null)
             {
                 EnsureComp<ForensicsComponent>(recipient, out var recipientComp);
-                recipientComp.DNAs.Add((donorComp.DNA, TimeSpan.Zero)); // Goobstation
+                recipientComp.DNAs.Add(donorComp.DNA);
                 recipientComp.CanDnaBeCleaned = canDnaBeCleaned;
             }
         }

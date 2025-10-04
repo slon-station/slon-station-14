@@ -45,9 +45,9 @@
   components:
     - type: Sprite
       layers:
-      - state: red
-      - sprite: Objects/Fun/Plushies/bee.rsi
-        state: icon
+        - state: red
+        - sprite: Objects/Fun/toys.rsi
+          state: plushie_h
     - type: RandomSpawner
       rarePrototypes:
         - FoamBlade
@@ -79,9 +79,6 @@
         - PlushieJvne # Goobstation
         - PlushieFern # Goobstation
         - PlushieAbductor # Goobstation
-        # WD EDIT START
-        - FaceHuggerToys
-        # WD EDIT END
       chance: 0.5
       offset: 0.2
 

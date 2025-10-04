@@ -8,7 +8,6 @@
 
 using Content.Goobstation.Shared.Flashbang;
 using Content.Shared.Actions;
-using Content.Shared.Flash;
 using Content.Shared.Inventory;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameStates;
@@ -102,7 +101,6 @@ public abstract class SwitchableOverlaySystem<TComp, TEvent> : EntitySystem // t
         args.State = new SwitchableVisionOverlayComponentState
         {
             Color = component.Color,
-            IsEquipment = component.IsEquipment,
             IsActive = component.IsActive,
             FlashDurationMultiplier = component.FlashDurationMultiplier,
             ActivateSound = component.ActivateSound,
@@ -118,7 +116,6 @@ public abstract class SwitchableOverlaySystem<TComp, TEvent> : EntitySystem // t
             return;
 
         component.Color = state.Color;
-        component.IsEquipment = state.IsEquipment;
         component.FlashDurationMultiplier = state.FlashDurationMultiplier;
         component.ActivateSound = state.ActivateSound;
         component.DeactivateSound = state.DeactivateSound;
@@ -191,7 +188,6 @@ public abstract class SwitchableOverlaySystem<TComp, TEvent> : EntitySystem // t
         }
 
         component.IsActive = activate;
-        _actions.SetToggled(component.ToggleActionEntity, activate); // WD EDIT - it's white dream system but okay
         Dirty(uid, component);
     }
 

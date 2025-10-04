@@ -3,8 +3,6 @@
 // SPDX-FileCopyrightText: 2025 Aiden <28298836+Aidenkrz@users.noreply.github.com>
 //
 // SPDX-License-Identifier: MIT
-using Content.Shared.Maps;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Parallax.Biomes.Layers;
 
@@ -16,5 +14,5 @@ public partial interface IBiomeWorldLayer : IBiomeLayer
     /// <summary>
     /// What tiles we're allowed to spawn on, real or biome.
     /// </summary>
-    List<ProtoId<ContentTileDefinition>> AllowedTiles { get; }
+    List<string> AllowedTiles { get; }
 }

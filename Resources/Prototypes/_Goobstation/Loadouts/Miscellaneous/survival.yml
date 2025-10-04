@@ -69,12 +69,3 @@
     proto: PlasmaBreather
   equipment:
     suitstorage: PlasmaTankFilledInternals
-
-- type: loadout
-  id: EmergencySilicon
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: Silicon
-  storage:
-    back:
-    - BoxSurvivalSlotsSilicon

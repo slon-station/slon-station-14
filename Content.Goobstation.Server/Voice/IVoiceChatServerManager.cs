@@ -11,10 +11,8 @@ namespace Content.Goobstation.Server.Voice;
 /// <summary>
 /// Interface for the server-side voice chat manager.
 /// </summary>
-public interface IVoiceChatServerManager
+public interface IVoiceChatServerManager : IDisposable
 {
     void Update();
     Dictionary<NetConnection, VoiceClientData> Clients { get; }
-
-    void Shutdown();
 }

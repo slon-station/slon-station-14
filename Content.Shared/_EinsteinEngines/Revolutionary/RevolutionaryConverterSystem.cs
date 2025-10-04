@@ -1,12 +1,7 @@
-using Content.Shared._EinsteinEngines.Language.Components;
-using Content.Shared._EinsteinEngines.Language.Systems;
 using Content.Shared._EinsteinEngines.Revolutionary.Components;
-using Content.Shared.Charges.Components;
-using Content.Shared.Charges.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Dataset;
 using Content.Shared.DoAfter;
-using Content.Shared.Flash;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Components;
@@ -21,14 +16,10 @@ public sealed class RevolutionaryConverterSystem : EntitySystem
 {
     private static readonly ProtoId<LocalizedDatasetPrototype> RevConvertSpeechProto = "RevolutionaryConverterSpeech";
 
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedChatSystem _chat = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedLanguageSystem _language = default!;
-    [Dependency] private readonly SharedChargesSystem _chargesSystem = default!;
-    [Dependency] private readonly SharedFlashSystem _flash = default!;
 
     private LocalizedDatasetPrototype? _speechLocalization;
 
@@ -66,38 +57,21 @@ public sealed class RevolutionaryConverterSystem : EntitySystem
     public void OnConvertDoAfter(Entity<RevolutionaryConverterComponent> entity, ref RevolutionaryConverterDoAfterEvent args)
     {
         if (args.Target == null
-            || args.Cancelled
-            || args.Used == null
-            || args.Target == null)
+            || args.Cancelled)
             return;
 
-        ConvertTarget(args.Used.Value, args.Target.Value, args.User);
-    }
+        var ev = new AfterRevolutionaryConvertedEvent(args.Target!.Value, args.User, args.Used);
+        RaiseLocalEvent(args.User, ref ev);
 
-    public void ConvertTarget(EntityUid used, EntityUid targetConvertee, EntityUid user)
-    {
-        var ev = new AfterRevolutionaryConvertedEvent(targetConvertee, user, used);
-        RaiseLocalEvent(user, ref ev);
-        RaiseLocalEvent(used, ref ev);
+        if (args.Used != null)
+            RaiseLocalEvent(args.Used.Value, ref ev);
     }
 
     public void OnConverterAfterInteract(Entity<RevolutionaryConverterComponent> entity, ref AfterInteractEvent args)
     {
         if (args.Handled
-            || !args.Target.HasValue
-            || !args.CanReach
-            || (entity.Comp.ConsumesCharges > 0
-            && !_chargesSystem.TryUseCharges(entity.Owner, entity.Comp.ConsumesCharges)))
+            || !args.CanReach)
             return;
-
-        if (entity.Comp.ApplyFlashEffect)
-        {
-            _flash.Flash(args.Target.Value, args.User, entity.Owner, entity.Comp.FlashDuration, entity.Comp.SlowToOnFlashed, melee: true);
-
-            bool hasChargesLeft = entity.Comp.ConsumesCharges <= 0 || _chargesSystem.HasCharges(entity.Owner, entity.Comp.ConsumesCharges);
-            _appearance.SetData(entity.Owner, FlashVisuals.Flashing, hasChargesLeft);
-            _appearance.SetData(entity.Owner, FlashVisuals.Burnt, !hasChargesLeft);
-        }
 
         if (args.Target is not { Valid: true } target
             || !HasComp<MobStateComponent>(target)
@@ -113,41 +87,29 @@ public sealed class RevolutionaryConverterSystem : EntitySystem
         if (user == target)
             return;
 
-        if (SpeakPropaganda(converter, user)
-            // Note: this check is skipped if the speaker speaks lines and somehow doesn't have a languageSpeaker component.
-            && EntityManager.TryGetComponent<LanguageSpeakerComponent>(user, out var speakerComponent)) // returns true if the chosen conversion method uses a spoken line of text
-        {
-            //check if spoken language can be understood by target
-            if (!_language.CanUnderstand(target, speakerComponent.CurrentLanguage))
-                return; //the target does not understand the speaker's language, so the conversion fails
-        }
+        SpeakPropaganda(converter, user);
 
-        if (converter.Comp.ConversionDuration > TimeSpan.Zero)
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager,
+            user,
+            converter.Comp.ConversionDuration,
+            new RevolutionaryConverterDoAfterEvent(),
+            converter.Owner,
+            target: target,
+            used: converter.Owner,
+            showTo: converter.Owner)
         {
-            _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager,
-                user,
-                converter.Comp.ConversionDuration,
-                new RevolutionaryConverterDoAfterEvent(),
-                converter.Owner,
-                target: target,
-                used: converter.Owner,
-                showTo: converter.Owner)
-            {
-                Hidden = !converter.Comp.VisibleDoAfter,
-                BreakOnMove = false,
-                BreakOnWeightlessMove = false,
-                BreakOnDamage = true,
-                NeedHand = true,
-                BreakOnHandChange = false,
-            });
-        }
-        else
-            ConvertTarget(converter.Owner, target, user);
+            Hidden = !converter.Comp.VisibleDoAfter,
+            BreakOnMove = false,
+            BreakOnWeightlessMove = false,
+            BreakOnDamage = true,
+            NeedHand = true,
+            BreakOnHandChange = false,
+        });
     }
 }
 
 /// <summary>
-/// Called after a converter is used on another person to check for rev conversion.
+/// Called after a converter is used via melee on another person to check for rev conversion.
 /// Raised on the user of the converter, the target hit by the converter, and the converter used.
 /// </summary>
 [ByRefEvent]

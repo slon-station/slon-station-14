@@ -102,8 +102,7 @@
   abstract: true
   components:
   - type: Item
-    shape:
-    - 0,0,1,0
+    storedRotation: -90
   - type: FlavorProfile
     flavors:
       - sweet

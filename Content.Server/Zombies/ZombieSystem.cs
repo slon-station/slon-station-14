@@ -47,6 +47,7 @@ using Content.Server.Body.Systems;
 using Content.Server.Chat;
 using Content.Server.Chat.Systems;
 using Content.Server.Emoting.Systems;
+using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Speech.EntitySystems;
 using Content.Server.Roles;
 using Content.Shared.Anomaly.Components;
@@ -65,7 +66,6 @@ using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Zombies;
-using Content.Shared.Blocking; // Goobstation
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -114,6 +114,7 @@ namespace Content.Server.Zombies
         {
             base.Initialize();
 
+            SubscribeLocalEvent<ZombieComponent, ComponentStartup>(OnStartup);
             SubscribeLocalEvent<ZombieComponent, EmoteEvent>(OnEmote, before:
                 new[] { typeof(VocalSystem), typeof(BodyEmotesSystem) });
 
@@ -260,6 +261,8 @@ namespace Content.Server.Zombies
                 comp.CurrentLanguage = component.ForcedLanguage;
             _language.UpdateEntityLanguages(uid);
             // Goobstation Change End
+
+            _protoManager.TryIndex(component.EmoteSoundsId, out component.EmoteSounds);
         }
 
         private void OnEmote(EntityUid uid, ZombieComponent component, ref EmoteEvent args)
@@ -267,10 +270,7 @@ namespace Content.Server.Zombies
             // always play zombie emote sounds and ignore others
             if (args.Handled)
                 return;
-
-            _protoManager.TryIndex(component.EmoteSoundsId, out var sounds);
-
-            args.Handled = _chat.TryPlayEmoteSound(uid, sounds, args.Emote);
+            args.Handled = _chat.TryPlayEmoteSound(uid, component.EmoteSounds, args.Emote);
         }
 
         private void OnMobState(EntityUid uid, ZombieComponent component, MobStateChangedEvent args)
@@ -293,11 +293,6 @@ namespace Content.Server.Zombies
                 // Stop random groaning
                 _autoEmote.RemoveEmote(uid, "ZombieGroan");
             }
-        }
-
-        private bool IsUserBlocking(BlockingUserComponent? component) // Goobstation
-        {
-            return (TryComp<BlockingComponent>(component?.BlockingItem, out var blockComp) && blockComp.IsBlocking);
         }
 
         private float GetZombieInfectionChance(EntityUid uid, ZombieComponent zombieComponent)
@@ -340,9 +335,6 @@ namespace Content.Server.Zombies
 
                 if (!TryComp<MobStateComponent>(entity, out var mobState))
                     continue;
-
-                if (TryComp<BlockingUserComponent>(entity, out var blockingUser) && IsUserBlocking(blockingUser)) // Goobstation edit - prevents infection if user is actively blocking
-                    return;
 
                 if (HasComp<ZombieComponent>(entity) || HasComp<InitialInfectedComponent>(entity)) // Goobstation edit - prevent zombies from damaging IIs
                 {

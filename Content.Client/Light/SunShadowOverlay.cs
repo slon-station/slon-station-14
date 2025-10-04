@@ -16,8 +16,6 @@ namespace Content.Client.Light;
 
 public sealed class SunShadowOverlay : Overlay
 {
-    private static readonly ProtoId<ShaderPrototype> MixShader = "Mix";
-
     public override OverlaySpace Space => OverlaySpace.BeforeLighting;
 
     [Dependency] private readonly IClyde _clyde = default!;
@@ -157,7 +155,7 @@ public sealed class SunShadowOverlay : Overlay
                         viewport.LightRenderTarget.GetWorldToLocalMatrix(eye, scale);
                     worldHandle.SetTransform(invMatrix);
 
-                    var maskShader = _protoManager.Index(MixShader).Instance();
+                    var maskShader = _protoManager.Index<ShaderPrototype>("Mix").Instance();
                     worldHandle.UseShader(maskShader);
 
                     worldHandle.DrawTextureRect(_target.Texture, worldBounds, Color.Black.WithAlpha(alpha));

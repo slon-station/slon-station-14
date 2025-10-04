@@ -12,6 +12,16 @@
         "directions": 4
     },
     {
+        "name": "pit",
+        "delays": [
+            [
+              0.2,
+              0.2,
+              0.2
+            ]
+          ]
+    },
+    {
         "name": "icon"
     },
     {

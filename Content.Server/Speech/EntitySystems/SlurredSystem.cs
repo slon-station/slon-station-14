@@ -10,10 +10,8 @@
 using System.Text;
 using Content.Server.Speech.Components;
 using Content.Shared.Drunk;
-using Content.Shared.Speech;
 using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -25,7 +23,10 @@ public sealed class SlurredSystem : SharedSlurredSystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
-    private static readonly ProtoId<StatusEffectPrototype> SlurKey = "SlurredSpeech";
+
+
+    [ValidatePrototypeId<StatusEffectPrototype>]
+    private const string SlurKey = "SlurredSpeech";
 
     public override void Initialize()
     {

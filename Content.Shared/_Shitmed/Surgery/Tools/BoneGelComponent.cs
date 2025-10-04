@@ -14,7 +14,6 @@ public sealed partial class BoneGelComponent : Component, ISurgeryToolComponent
 {
     public string ToolName => "bone gel";
 
-    [DataField]
     public bool? Used { get; set; } = null;
 
     [DataField]

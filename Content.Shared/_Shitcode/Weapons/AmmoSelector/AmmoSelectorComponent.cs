@@ -18,7 +18,7 @@ public sealed partial class AmmoSelectorComponent : Component
     public HashSet<ProtoId<SelectableAmmoPrototype>> Prototypes = new();
 
     [DataField, AutoNetworkedField]
-    public ProtoId<SelectableAmmoPrototype>? CurrentlySelected;
+    public SelectableAmmoPrototype? CurrentlySelected;
 
     [DataField]
     public SoundSpecifier? SoundSelect = new SoundPathSpecifier("/Audio/Weapons/Guns/Misc/selector.ogg");

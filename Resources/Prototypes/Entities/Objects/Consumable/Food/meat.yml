@@ -218,7 +218,6 @@
   - type: Tag
     tags:
     - Meat
-    - Raw
   - type: Item
     inhandVisuals:
       left:

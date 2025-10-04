@@ -24,9 +24,9 @@ public sealed class RunVerbAsCommand : ToolshedCommand
     private SharedVerbSystem? _verb;
 
     [CommandImplementation]
-    public IEnumerable<EntityUid> RunVerbAs(
+    public IEnumerable<NetEntity> RunVerbAs(
             IInvocationContext ctx,
-            [PipedArgument] IEnumerable<EntityUid> input,
+            [PipedArgument] IEnumerable<NetEntity> input,
             EntityUid runner,
             string verb
         )
@@ -34,7 +34,7 @@ public sealed class RunVerbAsCommand : ToolshedCommand
         _verb ??= GetSys<SharedVerbSystem>();
         verb = verb.ToLowerInvariant();
 
-        foreach (var eId in input)
+        foreach (var i in input)
         {
             if (EntityManager.Deleted(runner) && runner.IsValid())
                 ctx.ReportError(new DeadEntity(runner));
@@ -42,6 +42,7 @@ public sealed class RunVerbAsCommand : ToolshedCommand
             if (ctx.GetErrors().Any())
                 yield break;
 
+            var eId = EntityManager.GetEntity(i);
             var verbs = _verb.GetLocalVerbs(eId, runner, Verb.VerbTypes, true);
 
             // if the "verb name" is actually a verb-type, try run any verb of that type.
@@ -52,7 +53,7 @@ public sealed class RunVerbAsCommand : ToolshedCommand
                 if (verbTy != null)
                 {
                     _verb.ExecuteVerb(verbTy, runner, eId, forced: true);
-                    yield return eId;
+                    yield return i;
                 }
             }
 
@@ -61,7 +62,7 @@ public sealed class RunVerbAsCommand : ToolshedCommand
                 if (verbTy.Text.ToLowerInvariant() == verb)
                 {
                     _verb.ExecuteVerb(verbTy, runner, eId, forced: true);
-                    yield return eId;
+                    yield return i;
                 }
             }
         }

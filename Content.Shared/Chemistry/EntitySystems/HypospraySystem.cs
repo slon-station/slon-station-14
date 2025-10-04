@@ -21,11 +21,9 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-using Content.Shared.Administration.Logs;
-using Content.Shared.Body.Components;
-using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.Chemistry.Components;
+using Content.Goobstation.Common.Chemistry;
 using Content.Shared.Chemistry.Components.SolutionManager;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Hypospray.Events;
 using Content.Shared.Database;
 using Content.Goobstation.Maths.FixedPoint;
@@ -40,7 +38,6 @@ using Content.Shared.Verbs;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Administration.Logs;
-using Content.Shared.Chemistry.EntitySystems.Hypospray;
 
 namespace Content.Shared.Chemistry.EntitySystems;
 
@@ -178,6 +175,10 @@ public sealed class HypospraySystem : EntitySystem
             // meleeSys.SendLunge(angle, user);
         }
 
+        // Slon - autoinjectors
+        var hypoevent = new AfterHyposprayInjectsEvent(user, target);
+        RaiseLocalEvent(entity, ref hypoevent);
+
         _audio.PlayPredicted(component.InjectSound, target, user);
 
         // Medipens and such use this system and don't have a delay, requiring extra checks
@@ -205,11 +206,8 @@ public sealed class HypospraySystem : EntitySystem
         var ev = new TransferDnaEvent { Donor = target, Recipient = uid };
         RaiseLocalEvent(target, ref ev);
 
-        var afterinjectev = new AfterHyposprayInjectsEvent { User = user, Target = target }; //Goobedit
-        RaiseLocalEvent(uid, ref afterinjectev);
-
         // same LogType as syringes...
-        _adminLogger.Add(LogType.ForceFeed, $"{ToPrettyString(user):user} injected {ToPrettyString(target):target} with a solution {SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using a {ToPrettyString(uid):using}");
+        _adminLogger.Add(LogType.ForceFeed, $"{EntityManager.ToPrettyString(user):user} injected {EntityManager.ToPrettyString(target):target} with a solution {SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using a {EntityManager.ToPrettyString(uid):using}");
 
         return true;
     }

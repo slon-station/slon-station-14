@@ -71,7 +71,6 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-using Content.Goobstation.Common.SurveillanceCamera; // Goobstation
 using Content.Server.DeviceNetwork.Systems;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Events;
@@ -79,8 +78,9 @@ using Content.Shared.Power;
 using Content.Shared.SurveillanceCamera;
 using Content.Shared.UserInterface;// Goobstation
 using Robust.Server.GameObjects;
-using Robust.Shared.Map; // Goobstation
 using Robust.Shared.Player;
+using Robust.Shared.Map; // Goobstation
+using Robust.Shared.Timing; // Goobstation
 
 namespace Content.Server.SurveillanceCamera;
 
@@ -96,7 +96,7 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
         SubscribeLocalEvent<SurveillanceCameraMonitorComponent, PowerChangedEvent>(OnPowerChanged);
         SubscribeLocalEvent<SurveillanceCameraMonitorComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<SurveillanceCameraMonitorComponent, DeviceNetworkPacketEvent>(OnPacketReceived);
-        // SubscribeLocalEvent<SurveillanceCameraMonitorComponent, ComponentStartup>(OnComponentStartup); Goobstation remove
+        SubscribeLocalEvent<SurveillanceCameraMonitorComponent, ComponentStartup>(OnComponentStartup);
         SubscribeLocalEvent<SurveillanceCameraMonitorComponent, AfterActivatableUIOpenEvent>(OnToggleInterface);
         Subs.BuiEvents<SurveillanceCameraMonitorComponent>(SurveillanceCameraMonitorUiKey.Key, subs =>
         {
@@ -116,10 +116,11 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
         var query = EntityQueryEnumerator<ActiveSurveillanceCameraMonitorComponent, SurveillanceCameraMonitorComponent>();
         while (query.MoveNext(out var uid, out _, out var monitor))
         {
-            /*if (Paused(uid))
+            if (Paused(uid))
             {
                 continue;
-            } Goobstation remove */
+            }
+
             monitor.LastHeartbeatSent += frameTime;
             SendHeartbeat(uid, monitor);
             monitor.LastHeartbeat += frameTime;
@@ -127,20 +128,9 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
             if (monitor.LastHeartbeat > _maxHeartbeatTime)
             {
                 DisconnectCamera(uid, true, monitor);
-                RemComp<ActiveSurveillanceCameraMonitorComponent>(uid);
+                EntityManager.RemoveComponent<ActiveSurveillanceCameraMonitorComponent>(uid);
             }
         }
-        // Goobstation start
-        var queryTwo = EntityQueryEnumerator<ReconnectingSurveillanceCameraMonitorComponent, SurveillanceCameraMonitorComponent>();
-        while (queryTwo.MoveNext(out var uid, out var reconnectingComponent, out var monitor))
-        {
-            if (reconnectingComponent.TicksDelay-- == 0)
-            {
-                ReconnectToSubnets(uid, monitor);
-                RemComp<ReconnectingSurveillanceCameraMonitorComponent>(uid);
-            }
-        }
-        // Goobstation end
     }
 
     /// ROUTING:
@@ -166,10 +156,10 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
     /// Router - [ monitor freq ] -> Monitor
 
     #region Event Handling
-    /*private void OnComponentStartup(EntityUid uid, SurveillanceCameraMonitorComponent component, ComponentStartup args)
+    private void OnComponentStartup(EntityUid uid, SurveillanceCameraMonitorComponent component, ComponentStartup args)
     {
         RefreshSubnets(uid, component);
-    } Goobstation remove */
+    }
 
     private void OnPacketReceived(EntityUid uid, SurveillanceCameraMonitorComponent component,
         DeviceNetworkPacketEvent args)
@@ -329,14 +319,13 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
 
         monitor.ActiveCamera = null;
         monitor.ActiveCameraAddress = string.Empty;
-        RemComp<ActiveSurveillanceCameraMonitorComponent>(uid);
+        EntityManager.RemoveComponent<ActiveSurveillanceCameraMonitorComponent>(uid);
         UpdateUserInterface(uid, monitor);
     }
 
     private void RefreshSubnets(EntityUid uid, SurveillanceCameraMonitorComponent? monitor = null)
     {
-        if (!Resolve(uid, ref monitor)
-            || HasComp<ReconnectingSurveillanceCameraMonitorComponent>(uid)) // Goobstation
+        if (!Resolve(uid, ref monitor))
         {
             return;
         }
@@ -355,13 +344,14 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
         monitor.KnownSubnets.Clear();
         PingCameraNetwork(uid, monitor);
 
-        EnsureComp<ReconnectingSurveillanceCameraMonitorComponent>(uid); // Goobstation
+        // Slight delay to let known subnets to respond and be added to KnownSubnets
+        Timer.Spawn(TimeSpan.FromMilliseconds(700f), () => ReconnectToSubnets(uid, monitor)); // Goobstation
     }
 
     // Goobstation start
     private void ReconnectToSubnets(EntityUid uid, SurveillanceCameraMonitorComponent? monitor = null)
     {
-        if (!Resolve(uid, ref monitor, false))
+        if (!Resolve(uid, ref monitor))
         {
             return;
         }
@@ -478,7 +468,7 @@ public sealed class SurveillanceCameraMonitorSystem : EntitySystem
 
         monitor.ActiveCamera = camera;
 
-        EnsureComp<ActiveSurveillanceCameraMonitorComponent>(uid); // Goobstation
+        AddComp<ActiveSurveillanceCameraMonitorComponent>(uid);
 
         UpdateUserInterface(uid, monitor);
     }

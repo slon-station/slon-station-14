@@ -5,10 +5,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 using System.Text;
-using System.Text.RegularExpressions;
 using Content.Server.Speech.Components;
-using Content.Shared.Speech;
 using Robust.Shared.Random;
+using System.Text.RegularExpressions;
 
 namespace Content.Server.Speech.EntitySystems;
 

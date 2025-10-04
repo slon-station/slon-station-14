@@ -11,23 +11,26 @@ using Robust.Shared.Serialization;
 namespace Content.Goobstation.Shared.Factory;
 
 [RegisterComponent, NetworkedComponent, Access(typeof(SharedInteractorSystem))]
-[AutoGenerateComponentState]
+[AutoGenerateComponentState(fieldDeltas: true)]
 public sealed partial class InteractorComponent : Component
 {
     [DataField]
     public string ToolContainerId = "interactor_tool";
 
     /// <summary>
-    /// Signal port to toggle or enable/disable <see cref="AltInteract"/>.
+    /// Fixture to look for target items with.
     /// </summary>
     [DataField]
-    public ProtoId<SinkPortPrototype> AltInteractPort = "AltInteract";
+    public string TargetFixtureId = "interactor_target";
 
     /// <summary>
-    /// Whether to use alt interaction, i.e. use the highest priority verb on the target entity.
+    /// Entities currently colliding with <see cref="TargetFixtureId"/> and whether their CollisionWake was enabled.
+    /// When entities start to collide they get pushed to the end.
+    /// When picking up items the last value is taken.
+    /// This is essentially a FILO queue.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public bool AltInteract;
+    public List<(NetEntity, bool)> TargetEntities = new();
 }
 
 [Serializable, NetSerializable]

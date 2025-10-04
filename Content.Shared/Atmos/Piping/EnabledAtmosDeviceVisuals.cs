@@ -40,10 +40,4 @@ namespace Content.Shared.Atmos.Piping
     {
         Enabled,
     }
-
-    [Serializable, NetSerializable]
-    public enum PressureRegulatorVisuals : byte
-    {
-        State,
-    }
 }

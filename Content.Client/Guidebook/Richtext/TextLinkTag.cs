@@ -14,12 +14,14 @@ using Robust.Shared.Utility;
 namespace Content.Client.Guidebook.RichText;
 
 [UsedImplicitly]
-public sealed class TextLinkTag : IMarkupTagHandler
+public sealed class TextLinkTag : IMarkupTag
 {
     public string Name => "textlink";
 
+    public Control? Control;
+
     /// <inheritdoc/>
-    public bool TryCreateControl(MarkupNode node, [NotNullWhen(true)] out Control? control)
+    public bool TryGetControl(MarkupNode node, [NotNullWhen(true)] out Control? control)
     {
         if (!node.Value.TryGetString(out var text)
             || !node.Attributes.TryGetValue("link", out var linkParameter)
@@ -38,21 +40,22 @@ public sealed class TextLinkTag : IMarkupTagHandler
 
         label.OnMouseEntered += _ => label.FontColorOverride = Color.LightSkyBlue;
         label.OnMouseExited += _ => label.FontColorOverride = Color.CornflowerBlue;
-        label.OnKeyBindDown += args => OnKeybindDown(args, link, label);
+        label.OnKeyBindDown += args => OnKeybindDown(args, link);
 
         control = label;
+        Control = label;
         return true;
     }
 
-    private void OnKeybindDown(GUIBoundKeyEventArgs args, string link, Control? control)
+    private void OnKeybindDown(GUIBoundKeyEventArgs args, string link)
     {
         if (args.Function != EngineKeyFunctions.UIClick)
             return;
 
-        if (control == null)
+        if (Control == null)
             return;
 
-        var current = control;
+        var current = Control;
         while (current != null)
         {
             current = current.Parent;
@@ -62,6 +65,7 @@ public sealed class TextLinkTag : IMarkupTagHandler
             handler.HandleClick(link);
             return;
         }
+        Logger.Warning($"Warning! No valid ILinkClickHandler found.");
     }
 }
 

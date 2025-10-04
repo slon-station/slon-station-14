@@ -52,7 +52,7 @@ public sealed class SlavedBorgSystem : SharedSlavedBorgSystem
     /// </summary>
     public void AddLaw(SiliconLawset lawset, ProtoId<SiliconLawPrototype> law)
     {
-        lawset.Laws.Insert(0, _proto.Index(law).ShallowClone());
+        lawset.Laws.Insert(0, _proto.Index(law));
     }
 
     /// <summary>
@@ -60,7 +60,6 @@ public sealed class SlavedBorgSystem : SharedSlavedBorgSystem
     /// </summary>
     public void RemoveLaw(SiliconLawset lawset, ProtoId<SiliconLawPrototype> law)
     {
-        var target = _proto.Index(law).LawString;
-        lawset.Laws.RemoveAll(law => law.LawString == target);
+        lawset.Laws.Remove(_proto.Index(law));
     }
 }

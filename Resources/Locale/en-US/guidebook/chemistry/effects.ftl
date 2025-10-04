@@ -122,13 +122,15 @@ reagent-effect-guidebook-even-health-change =
     } { $changes }
 
 
-
 reagent-effect-guidebook-status-effect =
     { $type ->
         [add]   { $chance ->
                     [1] Causes
                     *[other] cause
-                } {LOC($key)} for at least {NATURALFIXED($time, 3)} {MANY("second", $time)} with accumulation
+                } {LOC($key)} for at least {NATURALFIXED($time, 3)} {MANY("second", $time)} { $refresh ->
+                                                                                                [false] with
+                                                                                                *[true] without
+                                                                                            } accumulation
         *[set]  { $chance ->
                     [1] Causes
                     *[other] cause
@@ -407,9 +409,6 @@ reagent-effect-guidebook-artifact-unlock =
         [1] Helps
         *[other] help
         } unlock an alien artifact.
-
-reagent-effect-guidebook-artifact-durability-restore =
-    Restores {$restored} durability in active alien artifact nodes.
 
 reagent-effect-guidebook-plant-attribute =
     { $chance ->

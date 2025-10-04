@@ -1,6 +1,4 @@
 // SPDX-FileCopyrightText: 2025 GoobBot <uristmchands@proton.me>
-// SPDX-FileCopyrightText: 2025 Hagvan <22118902+Hagvan@users.noreply.github.com>
-// SPDX-FileCopyrightText: 2025 Solstice <solsticeofthewinter@gmail.com>
 // SPDX-FileCopyrightText: 2025 SolsticeOfTheWinter <solsticeofthewinter@gmail.com>
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
@@ -40,24 +38,12 @@ public sealed class BloodtrakSystem : SharedBloodtrakSystem
     /// <summary>
     /// Checks the DNA of the puddle against known DNA entries to find a matching entity.
     /// </summary>
-    private (EntityUid, TimeSpan)? GetPuddleDnaOwner(EntityUid target, BloodtrakComponent component, EntityUid user)
+    private EntityUid? GetPuddleDnaOwner(EntityUid target, EntityUid user)
     {
         if (!_tag.HasTag(target, "DNASolutionScannable") || !HasComp<PuddleComponent>(target))
         {
             _popupSystem.PopupEntity(Loc.GetString("bloodtrak-scan-failed"), user, user);
             return null;
-        }
-
-        if (component.LastScannedTarget.Equals(target))
-        {
-            // cycle through DNAs already acquired
-            component.ResultListOffset++;
-            if (component.ResultListOffset == component.ResultList.Count)
-                component.ResultListOffset = 0;
-
-            var (dna, freshnessTimestamp, entityId) = component.ResultList[component.ResultListOffset];
-            _popupSystem.PopupEntity(Loc.GetString("bloodtrak-dna-saved", ("dna", dna)), user, user);
-            return (entityId, freshnessTimestamp);
         }
 
         var solutionsDna = _forensicsSystem.GetSolutionsDNA(target);
@@ -68,28 +54,15 @@ public sealed class BloodtrakSystem : SharedBloodtrakSystem
             return null;
         }
 
-        component.LastScannedTarget = target;
-        component.ResultList.Clear();
-        component.ResultListOffset = 0;
-
-        // select the first target
-
         var targetDna = GetEntityDNAs();
 
-        foreach (var (dna, freshnessTimestamp) in solutionsDna)
+        foreach (var dna in solutionsDna)
         {
-
             if (!targetDna.TryGetValue(dna, out var uid))
                 continue;
 
-            component.ResultList.Add((dna, freshnessTimestamp, uid));
-        }
-
-        if (component.ResultList.Count > 0)
-        {
-            var (dna, freshnessTimestamp, entityId) = component.ResultList[component.ResultListOffset];
-            _popupSystem.PopupEntity(Loc.GetString("bloodtrak-dna-saved", ("dna", dna)), user, user);
-            return (entityId, freshnessTimestamp);
+            _popupSystem.PopupEntity(Loc.GetString("bloodtrak-dna-saved"), user, user);
+            return uid;
         }
 
         _popupSystem.PopupEntity(Loc.GetString("bloodtrak-no-match"), user, user);
@@ -116,15 +89,7 @@ public sealed class BloodtrakSystem : SharedBloodtrakSystem
             return;
 
         args.Handled = true;
-        var dnaOwner = GetPuddleDnaOwner(target, component, args.User);
-        if (dnaOwner is { })
-        {
-            component.Target = dnaOwner.Value.Item1;
-            component.Freshness = dnaOwner.Value.Item2;
-            return;
-        }
-        component.Target = null;
-        component.Freshness = TimeSpan.Zero;
+        component.Target = GetPuddleDnaOwner(target, args.User);
     }
 
     public override bool TogglePinpointer(EntityUid uid, BloodtrakComponent? pinpointer = null)
@@ -146,14 +111,7 @@ public sealed class BloodtrakSystem : SharedBloodtrakSystem
             if (_delaySystem.IsDelayed(uid))
                 return false;
 
-            // Tracking duration scales linearly with freshness.
-            var newExpirationTime = _gameTiming.CurTime + pinpointer.MaximumTrackingDuration - (_gameTiming.CurTime - pinpointer.Freshness);
-            if (newExpirationTime <= _gameTiming.CurTime)
-            {
-                _popupSystem.PopupEntity(Loc.GetString("bloodtrak-sample-expired"), uid);
-                return false;
-            }
-            pinpointer.ExpirationTime = newExpirationTime;
+            pinpointer.ExpirationTime = _gameTiming.CurTime + pinpointer.TrackingDuration;
         }
 
         SetActive(uid, isActive, pinpointer);

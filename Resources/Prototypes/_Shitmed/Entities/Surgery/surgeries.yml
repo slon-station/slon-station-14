@@ -8,63 +8,14 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-# Base
-
 - type: entity
   abstract: true
   id: SurgeryBase
   components:
-  - type: SurgeryPartComponentCondition
-    inverse: true # regular surgeries can't be done on xenos (xeno surgeries are more complex, damage the user and have unique flavour text)
-    components:
-    - type: XenoBodyPart
   - type: Surgery
 
 - type: entity
-  abstract: true
   parent: SurgeryBase
-  id: BasePartSurgery
-  components:
-  - type: SurgeryPartPresentCondition
-
-- type: entity
-  abstract: true
-  parent: SurgeryBase
-  id: BaseSurgeryInsertOrgan
-  components:
-  - type: Surgery
-    requirement: SurgeryOpenIncision
-    steps: # change them if theres unique behaviour for inserting
-    - SurgeryStepSawBones
-    - SurgeryStepInsertOrgan
-    - SurgeryStepSealOrganWound
-  - type: SurgeryPartCondition
-    part: Head # change if needed
-  - type: SurgeryOrganCondition
-    inverse: true
-    reattaching: true
-    # add organ
-  # add SurgeryOrganSlotCondition.organSlot
-
-- type: entity
-  abstract: true
-  parent: SurgeryBase
-  id: BaseSurgeryRemoveOrgan
-  components:
-  - type: Surgery
-    requirement: SurgeryOpenIncision # change to ribcage for chest
-    steps:
-    - SurgeryStepOpenIncisionScalpel
-    - SurgeryStepClampBleeders
-    - SurgeryStepRemoveOrgan
-  - type: SurgeryPartCondition
-    part: Head # change if needed
-  # add SurgeryOrganCondition.organ
-
-# Common
-
-- type: entity
-  parent: BasePartSurgery
   id: SurgeryOpenIncision
   name: Open Incision
   components:
@@ -72,9 +23,10 @@
     steps:
     - SurgeryStepOpenIncisionScalpel
     - SurgeryStepRetractSkin
+  - type: SurgeryPartPresentCondition
 
 - type: entity
-  parent: BasePartSurgery
+  parent: SurgeryBase
   id: SurgeryStopBloodOutput
   name: Stop Constant Blood Output
   components:
@@ -84,9 +36,10 @@
     - SurgeryStepClampBleeders
     - SurgeryStepCloseBloodOutputs
   - type: SurgeryBleedsPresentCondition
+  - type: SurgeryPartPresentCondition
 
 - type: entity
-  parent: BasePartSurgery
+  parent: SurgeryBase
   id: SurgeryFixDismemberment
   name: Fix Dismemberment Leftovers
   components:
@@ -96,13 +49,14 @@
     - SurgeryStepRemoveSeveredSkin
     - SurgeryStepRemoveLeftoverBones
     - SurgeryStepSealDismembermentWound
+  - type: SurgeryPartPresentCondition
   - type: SurgeryBleedsPresentCondition
     inverted: true
   - type: SurgeryTraumaPresentCondition
     trauma: Dismemberment
 
 - type: entity
-  parent: BasePartSurgery
+  parent: SurgeryBase
   id: SurgeryCloseIncision
   name: Close Incision
   components:
@@ -112,6 +66,7 @@
     - SurgeryStepCloseBones
     - SurgeryStepMendRibcage
     - SurgeryStepCloseIncision
+  - type: SurgeryPartPresentCondition
 
 - type: entity
   parent: SurgeryBase
@@ -129,7 +84,7 @@
 - type: entity
   parent: SurgeryBase
   id: SurgeryRemovePart
-  name: Amputate
+  name: Remove Part
   components:
   - type: Surgery
     requirement: SurgeryOpenIncision
@@ -143,7 +98,7 @@
     inverse: true
 
 - type: entity
-  parent: BasePartSurgery
+  parent: SurgeryBase
   id: SurgeryMendBones
   name: Mend Bones
   components:
@@ -153,13 +108,14 @@
     - SurgeryStepSawBones
     - SurgeryStepClampInternalBleeders
     - SurgeryStepMendBones
+  - type: SurgeryPartPresentCondition
   - type: SurgeryBleedsPresentCondition
     inverted: true
   - type: SurgeryTraumaPresentCondition
     trauma: BoneDamage
 
 - type: entity
-  parent: BasePartSurgery
+  parent: SurgeryBase
   id: SurgeryHealOrgans
   name: Heal Organs
   components:
@@ -168,6 +124,7 @@
     steps:
     - SurgeryStepClampInternalBleeders
     - SurgeryStepHealOrgans
+  - type: SurgeryPartPresentCondition
   - type: SurgeryBleedsPresentCondition
     inverted: true
   - type: SurgeryTraumaPresentCondition
@@ -525,11 +482,17 @@
     - type: Brain
 
 - type: entity
-  parent: BaseSurgeryRemoveOrgan
+  parent: SurgeryBase
   id: SurgeryRemoveBorgBrain
   name: Remove Positronic Brain
   components:
-  # TODO: ipc surgery steps
+  - type: Surgery
+    requirement: SurgeryOpenIncision
+    steps:
+    # TODO: ipc surgery steps
+    - SurgeryStepSawBones
+    - SurgeryStepClampInternalBleeders
+    - SurgeryStepRemoveOrgan
   - type: SurgeryPartCondition
     part: Chest
   - type: SurgeryOrganCondition
@@ -537,23 +500,29 @@
     - type: BorgBrain
 
 - type: entity
-  parent: BaseSurgeryInsertOrgan
+  parent: SurgeryBase
   id: SurgeryInsertBrain
   name: Insert Brain
   components:
+  - type: Surgery
+    requirement: SurgeryOpenIncision
+    steps:
+    - SurgeryStepSawBones
+    - SurgeryStepInsertOrgan
+    - SurgeryStepSealOrganWound
   - type: SurgeryOrganSlotCondition
     organSlot: brain
   - type: SurgeryOrganCondition
     organ:
     - type: Brain
+    inverse: true
+    reattaching: true
 
 - type: entity
-  parent: BaseSurgeryInsertOrgan
+  parent: SurgeryInsertBrain
   id: SurgeryInsertBorgBrain
   name: Insert Positronic Brain
   components:
-  - type: SurgeryPartCondition
-    part: Chest
   - type: SurgeryOrganSlotCondition
     organSlot: posbrain
   - type: SurgeryOrganCondition
@@ -561,12 +530,16 @@
     - type: BorgBrain
 
 - type: entity
-  parent: BaseSurgeryRemoveOrgan
+  parent: SurgeryBase
   id: SurgeryRemoveHeart
   name: Remove Heart
   components:
   - type: Surgery
     requirement: SurgeryOpenRibcage
+    steps:
+    - SurgeryStepSawBones
+    - SurgeryStepClampInternalBleeders
+    - SurgeryStepRemoveOrgan
   - type: SurgeryPartCondition
     part: Chest
   - type: SurgeryOrganCondition
@@ -574,7 +547,7 @@
     - type: Heart
 
 - type: entity
-  parent: BaseSurgeryInsertOrgan
+  parent: SurgeryBase
   id: SurgeryInsertHeart
   name: Insert Heart
   components:
@@ -591,12 +564,20 @@
   - type: SurgeryOrganCondition
     organ:
     - type: Heart
+    inverse: true
+    reattaching: true
 
 - type: entity
-  parent: BaseSurgeryRemoveOrgan
+  parent: SurgeryBase
   id: SurgeryRemoveLiver
   name: Remove Liver
   components:
+  - type: Surgery
+    requirement: SurgeryOpenIncision
+    steps:
+    - SurgeryStepCarefulIncisionScalpel
+    - SurgeryStepClampInternalBleeders
+    - SurgeryStepRemoveOrgan
   - type: SurgeryPartCondition
     part: Groin
   - type: SurgeryOrganCondition
@@ -604,11 +585,12 @@
     - type: Liver
 
 - type: entity
-  parent: BaseSurgeryInsertOrgan
+  parent: SurgeryBase
   id: SurgeryInsertLiver
   name: Insert Liver
   components:
   - type: Surgery
+    requirement: SurgeryOpenIncision
     steps:
     - SurgeryStepInsertLiver
     - SurgeryStepSealOrganWound
@@ -619,14 +601,20 @@
   - type: SurgeryOrganCondition
     organ:
     - type: Liver
+    inverse: true
+    reattaching: true
 
 - type: entity
-  parent: BaseSurgeryRemoveOrgan
+  parent: SurgeryBase
   id: SurgeryRemoveLungs
   name: Remove Lungs
   components:
   - type: Surgery
     requirement: SurgeryOpenRibcage
+    steps:
+    - SurgeryStepSawBones
+    - SurgeryStepClampInternalBleeders
+    - SurgeryStepRemoveOrgan
   - type: SurgeryPartCondition
     part: Chest
   - type: SurgeryOrganCondition
@@ -634,7 +622,7 @@
     - type: Lung
 
 - type: entity
-  parent: BaseSurgeryInsertOrgan
+  parent: SurgeryBase
   id: SurgeryInsertLungs
   name: Insert Lungs
   components:
@@ -651,12 +639,20 @@
   - type: SurgeryOrganCondition
     organ:
     - type: Lung
+    inverse: true
+    reattaching: true
 
 - type: entity
-  parent: BaseSurgeryRemoveOrgan
+  parent: SurgeryBase
   id: SurgeryRemoveStomach
   name: Remove Stomach
   components:
+  - type: Surgery
+    requirement: SurgeryOpenIncision
+    steps:
+    - SurgeryStepCarefulIncisionScalpel
+    - SurgeryStepClampInternalBleeders
+    - SurgeryStepRemoveOrgan
   - type: SurgeryPartCondition
     part: Groin
   - type: SurgeryOrganCondition
@@ -664,13 +660,14 @@
     - type: Stomach
 
 - type: entity
-  parent: BaseSurgeryInsertOrgan
+  parent: SurgeryBase
   id: SurgeryInsertStomach
   name: Insert Stomach
   components:
   - type: Surgery
+    requirement: SurgeryOpenIncision
     steps:
-    - SurgeryStepInsertOrgan
+    - SurgeryStepInsertStomach
     - SurgeryStepSealOrganWound
   - type: SurgeryPartCondition
     part: Groin
@@ -679,22 +676,33 @@
   - type: SurgeryOrganCondition
     organ:
     - type: Stomach
+    inverse: true
+    reattaching: true
 
 - type: entity
-  parent: BaseSurgeryRemoveOrgan
+  parent: SurgeryBase
   id: SurgeryRemoveEyes
   name: Remove Eyes
   components:
+  - type: Surgery
+    requirement: SurgeryOpenIncision
+    steps:
+    - SurgeryStepSawBones
+    - SurgeryStepClampInternalBleeders
+    - SurgeryStepRemoveOrgan
+  - type: SurgeryPartCondition
+    part: Head
   - type: SurgeryOrganCondition
     organ:
     - type: Eyes
 
 - type: entity
-  parent: BaseSurgeryInsertOrgan
+  parent: SurgeryBase
   id: SurgeryInsertEyes
   name: Insert Eyes
   components:
   - type: Surgery
+    requirement: SurgeryOpenIncision
     steps:
     - SurgeryStepSawBones
     - SurgeryStepInsertEyes
@@ -704,6 +712,10 @@
   - type: SurgeryOrganCondition
     organ:
     - type: Eyes
+    inverse: true
+    reattaching: true
+
+
 
 # Fluff/Joke Surgeries
 
@@ -768,172 +780,3 @@
 #  - type: SurgeryMarkingCondition
 #    markingCategory: Tail
 #    matchString: FelinidTail
-
-## Augments
-
-- type: entity
-  abstract: true
-  parent: SurgeryBase
-  id: SurgeryOpenCavityBase
-  components:
-  - type: Surgery
-    requirement: SurgeryOpenRibcage
-    steps:
-    - SurgeryStepSawBones
-    - SurgeryStepOpenOrganSlot
-  - type: SurgeryOrganSlotCondition
-    inverse: true
-  - type: SurgeryBodyCondition
-    accepted: [ IPC ]
-    inverse: true
-
-- type: entity
-  abstract: true
-  parent: SurgeryBase
-  id: SurgeryInstallAugmentBase
-  components:
-  - type: Surgery
-    requirement: SurgeryOpenRibcage
-  - type: SurgeryOrganCondition
-    inverse: true
-    reattaching: true
-
-- type: entity
-  abstract: true
-  parent: SurgeryBase
-  id: SurgeryRemoveAugmentBase
-  components:
-  - type: Surgery
-    requirement: SurgeryOpenRibcage
-    steps:
-    - SurgeryStepSawBones
-    - SurgeryStepClampInternalBleeders
-    - SurgeryStepRemoveOrgan
-
-# Power Cell Slot
-
-- type: entity
-  parent: SurgeryInstallAugmentBase
-  id: SurgeryInsertPowerCellSlot
-  name: Insert Power Cell Slot
-  components:
-  - type: Surgery
-    steps:
-    - SurgeryStepSawBones
-    - SurgeryStepInsertAugmentPowerCellSlot
-    - SurgeryStepSealOrganWound
-  - type: SurgeryPartCondition
-    part: Chest
-  - type: SurgeryOrganCondition
-    organ:
-    - type: AugmentPowerCellSlot
-  - type: SurgeryOrganSlotCondition
-    organSlot: powerCell
-
-- type: entity
-  parent: SurgeryOpenCavityBase
-  id: SurgeryOpenPowerCellSlot
-  name: Open Cavity For Power Cell Slot
-  components:
-  - type: SurgeryPartCondition
-    part: Chest
-  - type: SurgeryOrganSlotCondition
-    organSlot: powerCell
-
-- type: entity
-  parent: SurgeryRemoveAugmentBase
-  id: SurgeryRemovePowerCellSlot
-  name: Remove Power Cell Slot
-  components:
-  - type: SurgeryPartCondition
-    part: Chest
-  - type: SurgeryOrganCondition
-    organ:
-    - type: AugmentPowerCellSlot
-
-# Power Cell Charger
-
-- type: entity
-  parent: SurgeryInstallAugmentBase
-  id: SurgeryInsertPowerCellCharger
-  name: Insert Internal Power Cell Charger
-  components:
-  - type: Surgery
-    steps:
-    - SurgeryStepSawBones
-    - SurgeryStepInsertAugmentPowerCellCharger
-    - SurgeryStepSealOrganWound
-  - type: SurgeryPartCondition
-    part: Chest
-  - type: SurgeryOrganCondition
-    organ:
-    - type: AugmentCharger
-  - type: SurgeryOrganSlotCondition
-    organSlot: charger
-
-- type: entity
-  parent: SurgeryOpenCavityBase
-  id: SurgeryOpenPowerCellCharger
-  name: Open Cavity For Power Cell Charger
-  components:
-  - type: SurgeryPartCondition
-    part: Chest
-  - type: SurgeryOrganSlotCondition
-    organSlot: charger
-
-- type: entity
-  parent: SurgeryRemoveAugmentBase
-  id: SurgeryRemovePowerCellCharger
-  name: Remove Internal Power Cell Charger
-  components:
-  - type: SurgeryPartCondition
-    part: Chest
-  - type: SurgeryOrganCondition
-    organ:
-    - type: AugmentCharger
-
-# Arm
-
-- type: entity
-  parent: SurgeryOpenCavityBase
-  id: SurgeryOpenArmAugment
-  name: Open Cavity For Arm Augments
-  components:
-  - type: Surgery
-    requirement: SurgeryOpenIncision # no ribcage
-  - type: SurgeryPartCondition
-    part: Arm
-  - type: SurgeryOrganSlotCondition
-    organSlot: armImplant
-
-- type: entity
-  parent: SurgeryInstallAugmentBase
-  id: SurgeryInsertArmAugment
-  name: Insert Arm Augment
-  components:
-  - type: Surgery
-    requirement: SurgeryOpenIncision # no ribcage
-    steps:
-    - SurgeryStepSawBones
-    - SurgeryStepInsertAugmentArm
-    - SurgeryStepSealOrganWound
-  - type: SurgeryPartCondition
-    part: Arm
-  - type: SurgeryOrganCondition
-    organ:
-    - type: AugmentArm
-  - type: SurgeryOrganSlotCondition
-    organSlot: armImplant
-
-- type: entity
-  parent: SurgeryRemoveAugmentBase
-  id: SurgeryRemoveArmAugment
-  name: Remove Arm Augment
-  components:
-  - type: Surgery
-    requirement: SurgeryOpenIncision # no ribcage
-  - type: SurgeryPartCondition
-    part: Arm
-  - type: SurgeryOrganCondition
-    organ:
-    - type: AugmentArm

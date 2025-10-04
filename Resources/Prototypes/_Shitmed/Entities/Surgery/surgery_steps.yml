@@ -604,10 +604,7 @@
     sprite: _Shitmed/Objects/Specific/Medical/Surgery/manipulation.rsi
     state: insertion
   - type: SurgeryAddOrganSlotStep
-  - type: SurgeryStepPainInflicter
-    amount: 21
-    painDuration: 60
-    sleepModifier: 0.34
+  - type: SurgeryStepEmoteEffect
 
 - type: entity
   parent: SurgeryStepInsertOrgan
@@ -648,6 +645,12 @@
   - type: SurgerySpecialDamageChangeEffect
     damageType: Rot
     isConsumable: true
+
+# Doesn't serve much of a purpose right now. Just here for completeness-sake.
+- type: entity
+  parent: SurgeryStepInsertOrgan
+  id: SurgeryStepInsertStomach
+  name: Add stomach
 
 - type: entity
   parent: SurgeryStepBase
@@ -757,20 +760,3 @@
 #  - type: ??? moth ops go here when wings can be destroyed
 #  - type: Sprite
 #    sprite: Interface/Emotes/chitter.png
-
-# Augments
-
-- type: entity
-  parent: SurgeryStepInsertOrgan
-  id: SurgeryStepInsertAugmentPowerCellSlot
-  name: Add power cell slot
-
-- type: entity
-  parent: SurgeryStepInsertOrgan
-  id: SurgeryStepInsertAugmentPowerCellCharger
-  name: Add power cell charger
-
-- type: entity
-  parent: SurgeryStepInsertOrgan
-  id: SurgeryStepInsertAugmentArm
-  name: Add arm augment

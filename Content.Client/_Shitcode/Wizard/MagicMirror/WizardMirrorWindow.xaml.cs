@@ -608,13 +608,13 @@ public sealed partial class WizardMirrorWindow : DefaultWindow
 
         var hairMarking = Profile.Appearance.HairStyleId switch
         {
-            "HairBald" => new List<Marking>(),
+            HairStyles.DefaultHairStyle => new List<Marking>(),
             _ => new() { new(Profile.Appearance.HairStyleId, new List<Color>() { Profile.Appearance.HairColor }) },
         };
 
         var facialHairMarking = Profile.Appearance.FacialHairStyleId switch
         {
-            "FacialHairShaved" => new List<Marking>(),
+            HairStyles.DefaultFacialHairStyle => new List<Marking>(),
             _ => new()
             {
                 new(Profile.Appearance.FacialHairStyleId, new List<Color>() { Profile.Appearance.FacialHairColor })

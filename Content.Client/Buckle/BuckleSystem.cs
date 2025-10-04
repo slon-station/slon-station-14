@@ -36,7 +36,6 @@
 // SPDX-FileCopyrightText: 2024 Арт <123451459+JustArt1m@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2025 Aiden <28298836+Aidenkrz@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2025 SX_7 <sn1.test.preria.2002@gmail.com>
-// SPDX-FileCopyrightText: 2025 RichardBlonski <48651647+RichardBlonski@users.noreply.github.com>
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -108,17 +107,17 @@ internal sealed class BuckleSystem : SharedBuckleSystem
             if (!TryComp<SpriteComponent>(buckledEntity, out var buckledSprite))
                 continue;
 
-            // Goobstation start
-            buckle.OriginalDrawDepth ??= buckledSprite.DrawDepth;
             if (isNorth)
             {
+                // This will only assign if empty, it won't get overwritten by new depth on multiple calls, which do happen easily
+                buckle.OriginalDrawDepth ??= buckledSprite.DrawDepth;
                 _sprite.SetDrawDepth((buckledEntity, buckledSprite), strapSprite.DrawDepth - 1);
             }
-            else
+            else if (buckle.OriginalDrawDepth.HasValue)
             {
-                _sprite.SetDrawDepth((buckledEntity, buckledSprite), strapSprite.DrawDepth + 1);
+                _sprite.SetDrawDepth((buckledEntity, buckledSprite), buckle.OriginalDrawDepth.Value);
+                buckle.OriginalDrawDepth = null;
             }
-            // Goobstation - end
         }
     }
 
@@ -134,16 +133,13 @@ internal sealed class BuckleSystem : SharedBuckleSystem
         if (!TryComp<SpriteComponent>(ent.Owner, out var buckledSprite))
             return;
 
-        // Goobstation - Start
-        var angle = _xformSystem.GetWorldRotation(args.Strap) + _eye.CurrentEye.Rotation;
-        var isNorth = angle.GetCardinalDir() == Direction.North;
+        var angle = _xformSystem.GetWorldRotation(args.Strap) + _eye.CurrentEye.Rotation; // Get true screen position, or close enough
+
+        if (angle.GetCardinalDir() != Direction.North)
+            return;
 
         ent.Comp.OriginalDrawDepth ??= buckledSprite.DrawDepth;
-        _sprite.SetDrawDepth(
-            (ent.Owner, buckledSprite),
-        strapSprite.DrawDepth + (isNorth ? -1 : 1)
-            );
-        // Goobstation - end
+        _sprite.SetDrawDepth((ent.Owner, buckledSprite), strapSprite.DrawDepth - 1);
     }
 
     /// <summary>

@@ -29,8 +29,3 @@
   id: HoPGloves
   equipment:
     gloves: ClothingHandsGlovesHop
-
-- type: loadout
-  id: HoPSummerShirt
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitHoPSummer

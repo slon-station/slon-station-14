@@ -40,7 +40,6 @@
     time: 18000  # 5 hrs
   canBeAntag: false
   goobcoins: 40 #Goob content
-  weight: 10 # Goob Edit
   icon: JobIconStationAi
   supervisors: job-supervisors-rd
   jobEntity: StationAiBrain

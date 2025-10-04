@@ -20,7 +20,6 @@
     inverted: true
     species:
     - IPC
-    - Plasmaman
   guides: [ Zombies ]
 
 - type: antag
@@ -34,5 +33,4 @@
     inverted: true
     species:
     - IPC
-    - Plasmaman
   guides: [ Zombies ]

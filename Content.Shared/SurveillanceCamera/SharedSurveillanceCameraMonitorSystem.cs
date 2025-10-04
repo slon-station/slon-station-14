@@ -5,8 +5,6 @@
 // SPDX-License-Identifier: MIT
 
 using Robust.Shared.Map; // Goobstation
-using Content.Shared.DeviceNetwork;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.SurveillanceCamera;
@@ -86,11 +84,11 @@ public sealed class SurveillanceCameraSetupBoundUiState : BoundUserInterfaceStat
 {
     public string Name { get; }
     public uint Network { get; }
-    public List<ProtoId<DeviceFrequencyPrototype>> Networks { get; }
+    public List<string> Networks { get; }
     public bool NameDisabled { get; }
     public bool NetworkDisabled { get; }
 
-    public SurveillanceCameraSetupBoundUiState(string name, uint network, List<ProtoId<DeviceFrequencyPrototype>> networks, bool nameDisabled, bool networkDisabled)
+    public SurveillanceCameraSetupBoundUiState(string name, uint network, List<string> networks, bool nameDisabled, bool networkDisabled)
     {
         Name = name;
         Network = network;

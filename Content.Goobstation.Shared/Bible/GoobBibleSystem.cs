@@ -81,7 +81,7 @@ public sealed partial class GoobBibleSystem : EntitySystem
             };
 
             _doAfter.TryStartDoAfter(doAfterArgs);
-            var popup = Loc.GetString("devil-banish-begin", ("target", target), ("user", performer));
+            var popup = Loc.GetString("devil-banish-begin", ("target", target), ("user", target));
             _popupSystem.PopupEntity(popup, target, PopupType.LargeCaution);
         }
 

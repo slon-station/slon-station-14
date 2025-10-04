@@ -11,8 +11,8 @@
 
 using Content.Shared.GameTicking.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Utility;
 using System.Linq;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.GameTicking;
 
@@ -20,10 +20,10 @@ namespace Content.Server.GameTicking;
 public sealed partial class GameTicker
 {
     [ViewVariables]
-    public ProtoId<LobbyBackgroundPrototype>? LobbyBackground { get; private set; }
+    public LobbyBackgroundPrototype? LobbyBackground { get; private set; }
 
     [ViewVariables]
-    private List<ProtoId<LobbyBackgroundPrototype>> _lobbyBackgrounds = [];
+    private List<LobbyBackgroundPrototype> _lobbyBackgrounds = [];
 
     private static readonly string[] WhitelistedBackgroundExtensions = new string[] {"png", "jpg", "jpeg", "webp"};
 
@@ -37,13 +37,13 @@ public sealed partial class GameTicker
                 continue;
             }
 
-            _lobbyBackgrounds.Add(prototype.ID);
+            _lobbyBackgrounds.Add(prototype);
         }
 
         RandomizeLobbyBackground();
     }
 
     private void RandomizeLobbyBackground() {
-        LobbyBackground = _lobbyBackgrounds.Any() ? _robustRandom.Pick(_lobbyBackgrounds) : (ProtoId<LobbyBackgroundPrototype>?) null;
+        LobbyBackground = _lobbyBackgrounds!.Any() ? _robustRandom.Pick(_lobbyBackgrounds!) : null;
     }
 }

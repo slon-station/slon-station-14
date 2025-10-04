@@ -69,7 +69,6 @@ using Content.Shared.Access;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.DeviceNetwork;
-using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.Popups;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Events;
@@ -77,7 +76,7 @@ using Content.Shared.Shuttles.Systems;
 using Content.Shared.UserInterface;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
+using Content.Shared.DeviceNetwork.Components;
 using Timer = Robust.Shared.Timing.Timer;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Chat.Systems;
@@ -96,6 +95,8 @@ public sealed partial class EmergencyShuttleSystem
     /// <summary>
     /// Has the emergency shuttle arrived?
     /// </summary>
+    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
 
     public bool EmergencyShuttleArrived { get; private set; }
 
@@ -133,7 +134,8 @@ public sealed partial class EmergencyShuttleSystem
 
     private CancellationTokenSource? _roundEndCancelToken;
 
-    private static readonly ProtoId<AccessLevelPrototype> EmergencyRepealAllAccess = "EmergencyShuttleRepealAll";
+    [ValidatePrototypeId<AccessLevelPrototype>]
+    private const string EmergencyRepealAllAccess = "EmergencyShuttleRepealAll";
     private static readonly Color DangerColor = Color.Red;
 
     /// <summary>
@@ -363,13 +365,11 @@ public sealed partial class EmergencyShuttleSystem
             _consoleSpams += 1;
             if (_consoleSpams == 5)
             {
-                _chatSystem.TrySendInGameICMessage(uid, "Error 452: RepealButtonOveruseException", InGameICChatType.Speak, hideChat: true);
-                _chatSystem.TrySendInGameICMessage(uid, "The maximum threshold for pressing the repeal button has been exceeded.", InGameICChatType.Speak, hideChat: true);
-                _chatSystem.TrySendInGameICMessage(uid, "Please refrain from further attempts at repeal at this time.", InGameICChatType.Speak, hideChat: true);
-            }
-            else if (_consoleSpams >= 7)
-            {
-                _explosion.TriggerExplosive(uid);
+                _chat.TrySendInGameICMessage(uid, "Error 452: RepealButtonOveruseException", InGameICChatType.Speak, hideChat: true);
+                _chat.TrySendInGameICMessage(uid, "The maximum threshold for pressing the repeal button has been exceeded.", InGameICChatType.Speak, hideChat: true);
+                _chat.TrySendInGameICMessage(uid, "Please refrain from further attempts at repeal at this time.", InGameICChatType.Speak, hideChat: true);
+            } else if (_consoleSpams >= 7) {
+                _entMan.System<ExplosionSystem>().TriggerExplosive(uid);
                 _consoleSpams = 0;
             }
         }
